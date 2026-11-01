@@ -138,6 +138,27 @@ class VendorImportResponse(BaseModel):
     is_duplicate: bool
     reported_quantity: int
     subcontract_job_id: str
+
+# --- Authentication & Users ---
+class LoginRequest(BaseModel):
+    username_or_email: str = Field(description="Email or username")
+    password: str = Field(min_length=4)
+
+class UserProfileResponse(BaseModel):
+    id: str
+    email: str
+    username: str
+    full_name: str
+    role: str
+    is_active: int
+    created_at: datetime
+
+    model_config = {"from_attributes": True}
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user: UserProfileResponse
     event_record_id: Optional[str] = None
     error_details: Optional[str] = None
 

@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { api } from './api/client';
 import { DashboardMetrics } from './types/erp';
+import { useAuth } from './context/AuthContext';
+import { LoginView } from './views/LoginView';
+import { ForgeFlowLogo } from './components/ForgeFlowLogo';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { DashboardView } from './views/DashboardView';
@@ -12,6 +15,7 @@ import { ImportView } from './views/ImportView';
 import { HistoryView } from './views/HistoryView';
 
 export function App() {
+  const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [currentTab, setCurrentTab] = useState<'dashboard' | 'subcontract' | 'receipts' | 'quality' | 'invoices' | 'import' | 'history'>('dashboard');
   const [metrics, setMetrics] = useState<DashboardMetrics | null>(null);
   const [loading, setLoading] = useState(true);
@@ -31,8 +35,10 @@ export function App() {
   };
 
   useEffect(() => {
-    fetchMetrics();
-  }, []);
+    if (isAuthenticated) {
+      fetchMetrics();
+    }
+  }, [isAuthenticated]);
 
   const handleResetBaseline = async () => {
     if (!confirm('Reset database back to the exact original assessment scenario values in PostgreSQL?')) return;
@@ -48,8 +54,24 @@ export function App() {
     }
   };
 
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-900 text-white font-mono text-xs">
+        <div className="flex items-center space-x-3">
+          <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+          <span>Verifying security credentials & session...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return <LoginView />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-100 dark:bg-[#0b0f17] text-slate-900 dark:text-slate-100 flex font-sans antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
+
       
       {/* Left Control Rail Sidebar */}
       <Sidebar
@@ -115,7 +137,8 @@ export function App() {
 
         {/* Operational Footer */}
         <footer className="bg-white dark:bg-[#0e1422] border-t border-slate-200 dark:border-forge-border py-3 px-6 text-xs text-slate-500 dark:text-slate-400 flex flex-col sm:flex-row items-center justify-between gap-2 transition-colors">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2.5">
+            <ForgeFlowLogo size={20} showText={false} />
             <span className="font-semibold text-slate-800 dark:text-slate-200">ForgeFlow ERP • Industrial Precision</span>
             <span>•</span>
             <span className="text-blue-600 dark:text-forge-cyan font-mono">PostgreSQL 16 Container (Docker)</span>

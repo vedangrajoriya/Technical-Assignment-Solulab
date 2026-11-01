@@ -151,3 +151,17 @@ class ActivityLog(Base):
 
     subcontract_job = relationship("SubcontractJob", back_populates="activity_logs")
 
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(String(36), primary_key=True, default=generate_uuid)
+    email = Column(String(128), unique=True, nullable=False, index=True)
+    username = Column(String(64), unique=True, nullable=False, index=True)
+    hashed_password = Column(String(255), nullable=False)
+    full_name = Column(String(128), nullable=False)
+    role = Column(String(32), default="SUPER_ADMIN", nullable=False)  # SUPER_ADMIN, PLANT_MANAGER, QA_LEAD
+    is_active = Column(Integer, default=1, nullable=False)
+    created_at = Column(DateTime, default=get_utc_now, nullable=False)
+
+

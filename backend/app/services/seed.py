@@ -9,9 +9,11 @@ from backend.app.models.entities import (
     QualityInspection,
     VendorInvoice,
     ActivityLog,
+    User,
     generate_uuid,
     get_utc_now
 )
+from backend.app.core.security import hash_password
 
 def seed_scenario():
     """
@@ -191,6 +193,22 @@ def seed_scenario():
         ]
         for log in logs:
             db.add(log)
+
+        # 8. Seed Super Admin User
+        existing_admin = db.query(User).filter((User.email == "admin@forgeflow.com") | (User.username == "superadmin")).first()
+        if not existing_admin:
+            super_admin = User(
+                id=generate_uuid(),
+                email="admin@forgeflow.com",
+                username="superadmin",
+                hashed_password=hash_password("Admin@123456"),
+                full_name="System Super Admin (Plant Controller)",
+                role="SUPER_ADMIN",
+                is_active=1,
+                created_at=now
+            )
+            db.add(super_admin)
+            print("[SEED] Created Super Admin profile: admin@forgeflow.com / superadmin")
 
         db.commit()
         print("[SEED] Successfully seeded exact assessment scenario into database:")

@@ -126,3 +126,20 @@ export interface VendorImportResponse {
   error_details?: string;
 }
 
+export interface UserProfile {
+  id: string;
+  email: string;
+  username: string;
+  full_name: string;
+  role: string;
+  is_active: number;
+  created_at: string;
+}
+
+export interface TokenResponse {
+  access_token: string;
+  token_type: string;
+  user: UserProfile;
+}
+
+

@@ -285,3 +285,36 @@ def test_15_scenario_reset_endpoint():
     assert d["required_quantity"] == 1000
     assert d["quality_accepted"] == 740
     assert d["customer_shortfall"] == 260
+
+def test_16_super_admin_jwt_authentication():
+    """
+    Verify Super Admin can authenticate via JWT and access /me profile.
+    """
+    # 1. Login with username
+    login_resp = client.post("/api/v1/auth/login", json={
+        "username_or_email": "superadmin",
+        "password": "Admin@123456"
+    })
+    assert login_resp.status_code == 200
+    body = login_resp.json()
+    assert "access_token" in body
+    assert body["token_type"] == "bearer"
+    assert body["user"]["role"] == "SUPER_ADMIN"
+    assert body["user"]["email"] == "admin@forgeflow.com"
+
+    # 2. Access /me using token
+    token = body["access_token"]
+    me_resp = client.get("/api/v1/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert me_resp.status_code == 200
+    assert me_resp.json()["username"] == "superadmin"
+
+def test_17_invalid_credentials_rejected():
+    """
+    Verify invalid passwords or bad identifiers are rejected with 401.
+    """
+    resp = client.post("/api/v1/auth/login", json={
+        "username_or_email": "superadmin",
+        "password": "WrongPassword123!"
+    })
+    assert resp.status_code == 401
+

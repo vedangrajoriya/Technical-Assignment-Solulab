@@ -13,6 +13,11 @@ class Settings(BaseSettings):
         "DATABASE_URL", 
         "postgresql+psycopg2://postgres:postgres@localhost:5432/mfg_erp"
     )
+
+    # JWT Authentication
+    JWT_SECRET_KEY: str = os.getenv("JWT_SECRET_KEY", "forgeflow-super-secure-production-jwt-key-2026-mfg-erp")
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 7 # 7 days
     
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")

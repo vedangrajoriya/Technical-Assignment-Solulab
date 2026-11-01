@@ -1,6 +1,8 @@
 import React from 'react';
-import { Clock, AlertTriangle, ShieldCheck, RefreshCw, Plus, Send, Sun, Moon, Laptop } from 'lucide-react';
+import { Clock, AlertTriangle, ShieldCheck, RefreshCw, Plus, Send, Sun, Moon, Laptop, LogOut, User } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { useAuth } from '../context/AuthContext';
+import { ForgeFlowLogo } from './ForgeFlowLogo';
 
 interface HeaderProps {
   customerName?: string;
@@ -28,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({
   loading
 }) => {
   const { theme, effectiveTheme, setTheme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
 
   return (
     <header className="bg-white dark:bg-[#0e1422] border-b border-slate-200 dark:border-forge-border px-6 py-3.5 sticky top-0 z-20 shadow-sm transition-colors duration-200">
@@ -120,6 +123,28 @@ export const Header: React.FC<HeaderProps> = ({
           >
             <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-blue-600 dark:text-forge-cyan' : ''}`} />
           </button>
+
+          {/* User Profile & Sign Out */}
+          {user && (
+            <div className="flex items-center space-x-2 pl-2 border-l border-slate-200 dark:border-slate-700">
+              <div className="hidden sm:flex flex-col text-right">
+                <span className="text-[11px] font-bold text-slate-900 dark:text-white font-mono leading-tight">
+                  {user.full_name}
+                </span>
+                <span className="text-[9px] text-blue-600 dark:text-cyan-400 font-mono font-semibold">
+                  {user.role}
+                </span>
+              </div>
+              <button
+                onClick={logout}
+                title="Sign Out"
+                className="p-1.5 rounded-lg bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 hover:bg-rose-100 dark:hover:bg-rose-900/60 border border-rose-200 dark:border-rose-500/30 transition flex items-center space-x-1"
+              >
+                <LogOut className="w-3.5 h-3.5" />
+                <span className="text-xs font-semibold hidden md:inline">Logout</span>
+              </button>
+            </div>
+          )}
 
         </div>
 
