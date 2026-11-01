@@ -14,7 +14,13 @@
     "strict": true,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "baseUrl": ".",
+    "paths": {
+      "three128": ["node_modules/three"],
+      "@designcodeio/threeui": ["src/shaders/structure-flow/StructureFlowCollection.tsx"],
+      "@designcodeio/threeui/style.css": ["src/shaders/threeui.css"]
+    }
   },
   "include": ["src"]
 }

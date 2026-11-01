@@ -17,11 +17,13 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { ForgeFlowLogo } from '../components/ForgeFlowLogo';
 import { LoginBeansAnimation } from '../components/LoginBeansAnimation';
+import { StructureFlowScene } from '../components/StructureFlowScene';
 
 export const LoginView: React.FC = () => {
   const { login } = useAuth();
   const { theme, setTheme } = useTheme();
 
+  const [bgMode, setBgMode] = useState<'structure-flow' | 'scatter-beans'>('structure-flow');
   const [identifier, setIdentifier] = useState('superadmin');
   const [password, setPassword] = useState('Admin@123456');
   const [showPassword, setShowPassword] = useState(false);
@@ -49,13 +51,46 @@ export const LoginView: React.FC = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-slate-900 dark:bg-[#070b12] text-slate-100 font-sans select-none">
+    <div className="relative min-h-screen w-full flex items-center justify-center p-4 overflow-hidden bg-[#050607] text-slate-100 font-sans select-none">
       
-      {/* Interactive Three.js 3D Scatter Beans Canvas Background */}
-      <LoginBeansAnimation />
+      {/* 3D Background: ThreeUI Structure Flow Dome or Interactive Scatter Beans */}
+      {bgMode === 'structure-flow' ? (
+        <StructureFlowScene />
+      ) : (
+        <LoginBeansAnimation />
+      )}
 
       {/* Top Bar Quick Controls */}
-      <div className="absolute top-4 right-4 z-20 flex items-center space-x-3">
+      <div className="absolute top-4 right-4 z-20 flex items-center space-x-2 sm:space-x-3">
+        
+        {/* Background Visual Switcher */}
+        <div className="flex items-center p-0.5 rounded-lg bg-white/10 dark:bg-slate-800/80 backdrop-blur-md border border-white/20 dark:border-slate-700/80 text-[11px] font-mono">
+          <button
+            onClick={() => setBgMode('structure-flow')}
+            title="ThreeUI Structure Flow Particle Dome"
+            className={`px-2 py-1 rounded transition flex items-center space-x-1 ${
+              bgMode === 'structure-flow' 
+                ? 'bg-blue-600 text-white font-bold shadow-sm' 
+                : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            <Sparkles className="w-3 h-3 text-cyan-300" />
+            <span>Structure Flow</span>
+          </button>
+          <button
+            onClick={() => setBgMode('scatter-beans')}
+            title="Interactive Kinetic Scatter Beans"
+            className={`px-2 py-1 rounded transition flex items-center space-x-1 ${
+              bgMode === 'scatter-beans' 
+                ? 'bg-blue-600 text-white font-bold shadow-sm' 
+                : 'text-slate-300 hover:text-white'
+            }`}
+          >
+            <span>Kinetic Beans</span>
+          </button>
+        </div>
+
+        {/* Theme Mode Selector */}
         <div className="flex items-center p-1 rounded-lg bg-white/10 dark:bg-slate-800/80 backdrop-blur-md border border-white/20 dark:border-slate-700/80 text-xs">
           <button
             onClick={() => setTheme('light')}
