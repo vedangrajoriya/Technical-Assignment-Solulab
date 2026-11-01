@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+<!-- STITCH_THREEJS_START:ANIMATION_2 class="fixed inset-0 w-full h-full bg-transparent" -->
+<div class="fixed inset-0 w-full h-full bg-transparent" style="display:block;">
+<script src="https://ajax.googleapis.com/ajax/libs/threejs/r125/three.min.js"></script>
+<div id="threejs-container-ANIMATION_2" style="width:100%;height:100%"></div>
+<script>
+(function() {
+  const container = document.getElementById('threejs-container-ANIMATION_2');
+  const devicePixelRatio = window.devicePixelRatio || 1;
+  // Three.js Signature 3D Manufacturing Material Flow Visualization for ForgeFlow ERP
+const width = container.clientWidth || window.innerWidth;
+const height = container.clientHeight || 420;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0f1d); // Deep industrial midnight navy
+scene.fog = new THREE.FogExp2(0x0a0f1d, 0.025);
+
+const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+camera.position.set(0, 16, 28);
+camera.lookAt(0, 1, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+renderer.setSize(width, height);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+container.appendChild(renderer.domElement);
+
+// Lighting
+const ambientLight = new THREE.AmbientLight(0xdbeafe, 0.6);
+scene.add(ambientLight);
+
+const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+dirLight.position.set(15, 25, 20);
+dirLight.castShadow = true;
+dirLight.shadow.mapSize.width = 1024;
+dirLight.shadow.mapSize.height = 1024;
+scene.add(dirLight);
+
+const blueSpot = new THREE.PointLight(0x3b82f6, 3, 30);
+blueSpot.position.set(-10, 8, 5);
+scene.add(blueSpot);
+
+const cyanSpot = new THREE.PointLight(0x06b6d4, 2.5, 30);
+cyanSpot.position.set(0, 8, 5);
+scene.add(cyanSpot);
+
+const greenSpot = new THREE.PointLight(0x10b981, 2.5, 25);
+greenSpot.position.set(12, 6, -3);
+scene.add(greenSpot);
+
+const redSpot = new THREE.PointLight(0xef4444, 2.5, 25);
+redSpot.position.set(12, 6, 6);
+scene.add(redSpot);
+
+// Industrial Floor Grid Plane
+const gridHelper = new THREE.GridHelper(50, 50, 0x1e293b, 0x0f172a);
+gridHelper.position.y = -0.5;
+scene.add(gridHelper);
+
+// Process Station Platforms & Indicators
+const stationsData = [
+  { name: "Manufacturer", x: -14, z: 0, color: 0x3b82f6, qty: "1,000 sent", label: "Apex Assembly Hub" },
+  { name: "Heat Treatment", x: -5, z: 0, color: 0x06b6d4, qty: "800 reported", label: "External Vendor Subcon" },
+  { name: "Warehouse Inward", x: 4, z: 0, color: 0xf59e0b, qty: "780 received (20 missing)", label: "Physical Dock receipt" },
+  { name: "Quality QC", x: 12, z: 0, color: 0x8b5cf6, qty: "780 inspected", label: "Inspection & Sorting" },
+  { name: "Accepted Stock", x: 18, z: -4.5, color: 0x10b981, qty: "740 units", label: "Finished Goods Bay" },
+  { name: "Quarantine / Rejection", x: 18, z: 4.5, color: 0xef4444, qty: "40 units", label: "Scrap & Rework Bay" }
+];
+
+const stationObjects = [];
+
+stationsData.forEach(st => {
+  const group = new THREE.Group();
+  group.position.set(st.x, 0, st.z);
+
+  // Platform Base Cylinder
+  const baseGeo = new THREE.CylinderGeometry(2.4, 2.7, 0.4, 32);
+  const baseMat = new THREE.MeshPhongMaterial({
+    color: 0x1e293b,
+    shininess: 60,
+    specular: 0x475569
+  });
+  const baseMesh = new THREE.Mesh(baseGeo, baseMat);
+  baseMesh.receiveShadow = true;
+  group.add(baseMesh);
+
+  // Glowing Outer Ring
+  const ringGeo = new THREE.TorusGeometry(2.6, 0.08, 16, 48);
+  const ringMat = new THREE.MeshBasicMaterial({ color: st.color });
+  const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+  ringMesh.rotation.x = Math.PI / 2;
+  ringMesh.position.y = 0.22;
+  group.add(ringMesh);
+
+  // Station Pillar / Tower
+  const pillarGeo = new THREE.CylinderGeometry(0.3, 0.4, 2.2, 16);
+  const pillarMat = new THREE.MeshPhongMaterial({ color: 0x334155 });
+  const pillar = new THREE.Mesh(pillarGeo, pillarMat);
+  pillar.position.y = 1.3;
+  group.add(pillar);
+
+  // Hologram Beacon Orb
+  const beaconGeo = new THREE.SphereGeometry(0.5, 24, 24);
+  const beaconMat = new THREE.MeshPhongMaterial({
+    color: st.color,
+    emissive: st.color,
+    emissiveIntensity: 0.7,
+    shininess: 100
+  });
+  const beacon = new THREE.Mesh(beaconGeo, beaconMat);
+  beacon.position.y = 2.6;
+  group.add(beacon);
+
+  scene.add(group);
+  stationObjects.push({ group, beacon, data: st });
+});
+
+// Conveyor Guideway Tracks
+const pathPoints1 = [
+  new THREE.Vector3(-14, 0.2, 0),
+  new THREE.Vector3(-5, 0.2, 0),
+  new THREE.Vector3(4, 0.2, 0),
+  new THREE.Vector3(12, 0.2, 0)
+];
+const curve1 = new THREE.CatmullRomCurve3(pathPoints1);
+const tubeGeo1 = new THREE.TubeGeometry(curve1, 64, 0.18, 8, false);
+const tubeMat1 = new THREE.MeshPhongMaterial({ color: 0x3b82f6, emissive: 0x1d4ed8, emissiveIntensity: 0.3 });
+const track1 = new THREE.Mesh(tubeGeo1, tubeMat1);
+scene.add(track1);
+
+// Accepted Track (Curve to upper bay)
+const curveAccepted = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(12, 0.2, 0),
+  new THREE.Vector3(15, 0.2, -2.5),
+  new THREE.Vector3(18, 0.2, -4.5)
+]);
+const trackAcc = new THREE.Mesh(new THREE.TubeGeometry(curveAccepted, 32, 0.16, 8, false), new THREE.MeshPhongMaterial({ color: 0x10b981, emissive: 0x059669, emissiveIntensity: 0.4 }));
+scene.add(trackAcc);
+
+// Rejected Track (Curve to lower bay)
+const curveRejected = new THREE.CatmullRomCurve3([
+  new THREE.Vector3(12, 0.2, 0),
+  new THREE.Vector3(15, 0.2, 2.5),
+  new THREE.Vector3(18, 0.2, 4.5)
+]);
+const trackRej = new THREE.Mesh(new THREE.TubeGeometry(curveRejected, 32, 0.16, 8, false), new THREE.MeshPhongMaterial({ color: 0xef4444, emissive: 0xb91c1c, emissiveIntensity: 0.4 }));
+scene.add(trackRej);
+
+// Discrepancy Alert Beacon between Vendor (-5) and Warehouse (+4)
+const discGroup = new THREE.Group();
+discGroup.position.set(-0.5, 1.8, 0);
+const alertOctaGeo = new THREE.OctahedronGeometry(0.55, 0);
+const alertMat = new THREE.MeshPhongMaterial({ color: 0xf59e0b, emissive: 0xd97706, emissiveIntensity: 0.8 });
+const alertMesh = new THREE.Mesh(alertOctaGeo, alertMat);
+discGroup.add(alertMesh);
+
+// Warning ring
+const discRing = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.05, 12, 32), new THREE.MeshBasicMaterial({ color: 0xf59e0b }));
+discRing.rotation.x = Math.PI / 2;
+discGroup.add(discRing);
+scene.add(discGroup);
+
+// Automotive Machined Transmission Shaft / Gear Component Archetype
+function createMachinedPart(scale = 1, colorHex = 0x94a3b8) {
+  const part = new THREE.Group();
+  
+  // Center cylinder spindle
+  const spindleGeo = new THREE.CylinderGeometry(0.35 * scale, 0.35 * scale, 1.4 * scale, 24);
+  const metalMat = new THREE.MeshStandardMaterial({
+    color: colorHex,
+    metalness: 0.75,
+    roughness: 0.25
+  });
+  const spindle = new THREE.Mesh(spindleGeo, metalMat);
+  spindle.rotation.z = Math.PI / 2;
+  spindle.castShadow = true;
+  part.add(spindle);
+
+  // Bevel gear teeth disk
+  const gearGeo = new THREE.CylinderGeometry(0.75 * scale, 0.75 * scale, 0.35 * scale, 20);
+  const gear = new THREE.Mesh(gearGeo, metalMat);
+  gear.rotation.z = Math.PI / 2;
+  part.add(gear);
+
+  // Flanged Collar
+  const flangeGeo = new THREE.TorusGeometry(0.85 * scale, 0.08 * scale, 12, 24);
+  const flange = new THREE.Mesh(flangeGeo, new THREE.MeshStandardMaterial({ color: 0x38bdf8, metalness: 0.8, roughness: 0.2 }));
+  part.add(flange);
+
+  return part;
+}
+
+// Moving Parts along the manufacturing line
+const movingBatches = [];
+const numParts = 16;
+
+for (let i = 0; i < numParts; i++) {
+  const isRejected = (i % 8 === 0); // 1 in 8 represents the small rejected ratio (40 vs 740)
+  const partMesh = createMachinedPart(0.65, isRejected ? 0xf87171 : 0xe2e8f0);
+  scene.add(partMesh);
+  
+  movingBatches.push({
+    mesh: partMesh,
+    progress: (i / numParts),
+    isRejected: isRejected,
+    speed: 0.0035 + (Math.random() * 0.0005)
+  });
+}
+
+// Particle stream (Sparks / Quality inspection flow)
+const particleCount = 180;
+const particleGeo = new THREE.BufferGeometry();
+const particlePos = new Float32Array(particleCount * 3);
+const particleColors = new Float32Array(particleCount * 3);
+
+for (let i = 0; i < particleCount; i++) {
+  particlePos[i * 3] = (Math.random() - 0.5) * 36;
+  particlePos[i * 3 + 1] = Math.random() * 3.5 + 0.3;
+  particlePos[i * 3 + 2] = (Math.random() - 0.5) * 8;
+
+  // Blue / Cyan / Emerald hues
+  const color = new THREE.Color().setHSL(0.55 + Math.random() * 0.15, 0.9, 0.6);
+  particleColors[i * 3] = color.r;
+  particleColors[i * 3 + 1] = color.g;
+  particleColors[i * 3 + 2] = color.b;
+}
+
+particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+particleGeo.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
+
+const particleMat = new THREE.PointsMaterial({
+  size: 0.18,
+  vertexColors: true,
+  transparent: true,
+  opacity: 0.8
+});
+const particles = new THREE.Points(particleGeo, particleMat);
+scene.add(particles);
+
+// Orbit Mouse Controls (Subtle Parallax)
+let mouseX = 0;
+let mouseY = 0;
+let targetCameraX = 0;
+let targetCameraY = 16;
+
+function onMouseMove(event) {
+  const rect = container.getBoundingClientRect();
+  mouseX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouseY = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+  targetCameraX = mouseX * 8;
+  targetCameraY = 16 + mouseY * 4;
+}
+window.addEventListener('mousemove', onMouseMove);
+
+function onWindowResize() {
+  const w = container.clientWidth || window.innerWidth;
+  const h = container.clientHeight || 420;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h);
+}
+window.addEventListener('resize', onWindowResize);
+
+// Animation Loop
+let clock = new THREE.Clock();
+
+function animate() {
+  requestAnimationFrame(animate);
+  const elapsedTime = clock.getElapsedTime();
+
+  // Subtle camera damping
+  camera.position.x += (targetCameraX - camera.position.x) * 0.04;
+  camera.position.y += (targetCameraY - camera.position.y) * 0.04;
+  camera.lookAt(1, 1, 0);
+
+  // Pulse beacons
+  stationObjects.forEach((st, idx) => {
+    st.beacon.position.y = 2.6 + Math.sin(elapsedTime * 3 + idx) * 0.18;
+    st.group.rotation.y = Math.sin(elapsedTime * 0.5 + idx) * 0.1;
+  });
+
+  // Rotate warning discrepancy octahedron
+  alertMesh.rotation.y += 0.03;
+  alertMesh.rotation.x += 0.02;
+  discRing.scale.setScalar(1 + Math.sin(elapsedTime * 4) * 0.15);
+
+  // Move parts along manufacturing process curve
+  movingBatches.forEach(item => {
+    item.progress += item.speed;
+    if (item.progress > 1) item.progress = 0;
+
+    let pos;
+    // Stage 1: Main line from Manufacturer to QC (0.0 to 0.72)
+    if (item.progress <= 0.72) {
+      const t = item.progress / 0.72;
+      pos = curve1.getPoint(t);
+      item.mesh.position.copy(pos);
+      item.mesh.position.y += 0.45;
+    } else {
+      // Stage 2: Diverge into Accepted or Rejected (0.72 to 1.0)
+      const tBranch = (item.progress - 0.72) / 0.28;
+      if (item.isRejected) {
+        pos = curveRejected.getPoint(tBranch);
+        item.mesh.position.copy(pos);
+        item.mesh.position.y += 0.45;
+      } else {
+        pos = curveAccepted.getPoint(tBranch);
+        item.mesh.position.copy(pos);
+        item.mesh.position.y += 0.45;
+      }
+    }
+
+    item.mesh.rotation.x += 0.04;
+    item.mesh.rotation.y += 0.02;
+  });
+
+  // Flowing ambient particles
+  const positions = particleGeo.attributes.position.array;
+  for (let i = 0; i < particleCount; i++) {
+    positions[i * 3] += 0.06; // Drift from left to right along flow
+    if (positions[i * 3] > 20) {
+      positions[i * 3] = -18;
+    }
+  }
+  particleGeo.attributes.position.needsUpdate = true;
+
+  renderer.render(scene, camera);
+}
+animate();
+
+})();
+</script>
+</div>
+<!-- STITCH_THREEJS_END:ANIMATION_2 -->
+</body>
+</html>

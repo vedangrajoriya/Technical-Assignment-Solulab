@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ForgeFlow ERP - Quality Control &amp; Metallurgical Inspection</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-container": "#007d57",
+            "inverse-surface": "#2c3039",
+            "tertiary-fixed": "#85f8c4",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container": "#ebedfa",
+            "on-primary-fixed-variant": "#003ea8",
+            "on-secondary-container": "#006172",
+            "error-container": "#ffdad6",
+            "surface-tint": "#0053db",
+            "tertiary-fixed-dim": "#68dba9",
+            "background": "#f9f9ff",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dbe1ff",
+            "on-background": "#181c24",
+            "on-secondary-fixed": "#001f26",
+            "surface-container-high": "#e5e8f4",
+            "on-surface": "#181c24",
+            "surface-dim": "#d7dae5",
+            "on-error": "#ffffff",
+            "on-surface-variant": "#434655",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c3c6d7",
+            "secondary-fixed": "#acedff",
+            "surface-variant": "#dfe2ee",
+            "primary-container": "#2563eb",
+            "on-primary-fixed": "#00174b",
+            "secondary-fixed-dim": "#4cd7f6",
+            "secondary-container": "#57dffe",
+            "on-tertiary-container": "#bdffdc",
+            "on-secondary-fixed-variant": "#004e5c",
+            "on-tertiary-fixed-variant": "#005137",
+            "primary": "#004ac6",
+            "on-primary-container": "#eeefff",
+            "inverse-on-surface": "#eef0fc",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f1f3ff",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#b4c5ff",
+            "surface-container-highest": "#dfe2ee",
+            "outline": "#737686",
+            "surface-bright": "#f9f9ff",
+            "inverse-primary": "#b4c5ff",
+            "tertiary": "#006243",
+            "secondary": "#00687a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem",
+            "gutter-mobile": "0.75rem",
+            "space-2xs": "0.125rem",
+            "margin-mobile": "1rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Geist"],
+            "headline-sm": ["Geist"],
+            "label-code": ["JetBrains Mono"],
+            "headline-md": ["Geist"],
+            "headline-lg": ["Geist"],
+            "body-md": ["Geist"],
+            "label-caps": ["Geist"],
+            "body-sm": ["Geist"],
+            "display-lg-mobile": ["Geist"],
+            "metric-val": ["JetBrains Mono"],
+            "display-lg": ["Geist"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-code": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "metric-val": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md text-body-md min-h-screen">
+<!-- ========================================================================= -->
+<!-- SIDE NAVIGATION (Shared Component: SideNavBar)                            -->
+<!-- ========================================================================= -->
+<aside class="fixed top-0 bottom-0 left-0 w-60 z-40 bg-inverse-surface border-r border-outline flex flex-col justify-between p-4">
+<!-- Top Brand & Header -->
+<div class="flex flex-col gap-5">
+<div class="flex items-center gap-3 px-1 py-1">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-inverse-on-surface font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-[20px]" data-icon="factory">factory</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-inverse-on-surface tracking-tight">ForgeFlow ERP</span>
+<span class="font-label-code text-label-code text-outline-variant">Apex Auto Components</span>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<button class="w-full flex items-center justify-center gap-2 bg-primary-container hover:bg-primary text-inverse-on-surface py-1.5 px-3 rounded font-body-sm text-body-sm font-medium transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="speed">speed</span>
+<span>Quick Dispatch</span>
+</button>
+<!-- Main Navigation Items -->
+<nav class="flex flex-col gap-1 mt-1">
+<!-- Operations Overview -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="dashboard">dashboard</span>
+<span>Operations Overview</span>
+</a>
+<!-- Dispatch & Gate -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="local_shipping">local_shipping</span>
+<span>Dispatch &amp; Gate</span>
+</a>
+<!-- Subcontractor BOM -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span>Subcontractor BOM</span>
+</a>
+<!-- Reconciliation Audit (Matched contextually for Quality & Metallurgical Audit) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-variant/10 text-inverse-on-surface border-l-2 border-primary-container font-headline-sm text-headline-sm rounded" href="#">
+<span class="material-symbols-outlined text-[18px] text-primary-fixed" data-icon="fact_check">fact_check</span>
+<span>Reconciliation Audit</span>
+</a>
+<!-- Scrap & Discrepancies -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="report_problem">report_problem</span>
+<span>Scrap &amp; Discrepancies</span>
+</a>
+<!-- Facility Settings -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="tune">tune</span>
+<span>Facility Settings</span>
+</a>
+</nav>
+</div>
+<!-- Footer System Diagnostics & Audit Logs -->
+<div class="flex flex-col gap-1 border-t border-outline/30 pt-3">
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-sm text-body-sm rounded" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="dns">dns</span>
+<span>System Diagnostics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-sm text-body-sm rounded" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="history">history</span>
+<span>Audit Logs</span>
+</a>
+<div class="mt-2 px-3 py-1 flex items-center justify-between text-outline-variant font-label-code text-label-code">
+<span>V2.4.12-PROD</span>
+<span class="flex h-2 w-2 relative">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary-fixed opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+</div>
+</div>
+</aside>
+<!-- ========================================================================= -->
+<!-- TOP APP BAR (Shared Component: TopNavBar)                                  -->
+<!-- ========================================================================= -->
+<header class="fixed top-0 left-60 right-0 h-14 z-30 bg-surface-container-lowest border-b border-surface-container-highest">
+<div class="flex justify-between items-center h-full px-6 max-w-[1760px] mx-auto">
+<!-- Search & Breadcrumb cluster -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="font-label-code text-label-code uppercase tracking-wider text-on-surface-variant">ForgeFlow ERP / Operations / Quality Control &amp; Metallurgy Lab</span>
+</div>
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline-variant text-[16px]" data-icon="search">search</span>
+<input class="w-full h-8 pl-8 pr-3 text-body-sm font-body-sm bg-surface-container-lowest border border-outline-variant/60 rounded focus:border-primary-container focus:outline-none transition-colors" placeholder="Search Heat Lot, Part No, or Sample ID..." type="text"/>
+</div>
+</div>
+<!-- Trailing Action Controls & Profile -->
+<div class="flex items-center gap-3">
+<!-- Action Buttons -->
+<button class="h-8 px-3 rounded bg-surface-container-lowest border border-outline-variant/60 hover:bg-surface-container-low text-on-surface font-body-sm text-body-sm font-medium flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="verified">verified</span>
+<span>Generate Inspection Certificate</span>
+</button>
+<button class="h-8 px-3 rounded bg-primary-container hover:bg-primary text-on-primary font-body-sm text-body-sm font-medium flex items-center gap-1.5 transition-colors shadow-none">
+<span class="material-symbols-outlined text-[16px]" data-icon="add">add</span>
+<span>Log Test Sample</span>
+</button>
+<div class="h-5 w-px bg-surface-container-highest mx-1"></div>
+<!-- System Icons -->
+<button class="relative p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[20px]" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full ring-2 ring-surface-container-lowest"></span>
+</button>
+<button class="p-1.5 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded transition-colors" title="System Help">
+<span class="material-symbols-outlined text-[20px]" data-icon="help_outline">help_outline</span>
+</button>
+<!-- User Profile Avatar / Chip -->
+<div class="flex items-center gap-2 pl-2">
+<div class="w-7 h-7 rounded bg-surface-container-high border border-outline-variant flex items-center justify-center font-label-code text-label-code font-semibold text-primary">
+            QC
+          </div>
+<div class="flex flex-col text-left leading-tight">
+<span class="font-body-sm text-body-sm font-medium text-on-surface">M. Patel</span>
+<span class="font-label-code text-[10px] text-on-surface-variant">Lead Metallurgist</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE CONTENT                                                    -->
+<!-- ========================================================================= -->
+<main class="ml-60 pt-14 p-6 min-h-screen">
+<div class="max-w-[1760px] mx-auto flex flex-col gap-5">
+<!-- ===================================================================== -->
+<!-- PAGE HEADER: Lot Context & Inspection Metadata                        -->
+<!-- ===================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/50 p-4 rounded flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2">
+<h1 class="font-headline-lg text-headline-lg text-on-surface">Incoming Material Quality Inspection — Heat Treatment Lot HT-402</h1>
+<span class="h-5 px-2 bg-surface-variant text-on-surface-variant rounded font-label-code text-label-code flex items-center font-medium">BAY 4B LAB STATION</span>
+</div>
+<div class="flex flex-wrap items-center gap-y-1 gap-x-4 font-body-sm text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary" data-icon="precision_manufacturing">precision_manufacturing</span>
+<span>Component: <strong class="text-on-surface font-label-code">PINION SHAFT (P/N: AAC-8842-HT)</strong></span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="domain">domain</span>
+<span>Subcontractor: <span class="text-on-surface">Kalyani Forge Thermal Bay 4B</span></span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="badge">badge</span>
+<span>Inspector: <span class="text-on-surface">QC-04 (M. Patel)</span></span>
+</div>
+<span class="text-outline-variant">•</span>
+<div class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="calendar_today">calendar_today</span>
+<span>Shift: <span class="text-on-surface font-label-code">24-MAY-2025 (SHIFT A)</span></span>
+</div>
+</div>
+</div>
+<!-- Segregation & Status Summary Tag -->
+<div class="flex items-center gap-3">
+<div class="flex flex-col items-end">
+<span class="font-label-code text-label-code text-on-surface-variant">GATE LOT STATUS</span>
+<span class="h-6 px-2.5 rounded bg-error-container text-on-error-container border border-error/20 font-label-code text-label-code font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+              PARTIALLY QUARANTINED
+            </span>
+</div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- INSPECTION METRIC KPIS (5-Column Analytical Bento)                   -->
+<!-- ===================================================================== -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+<!-- KPI 1: Total Received Inspected -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 p-4 rounded flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">TOTAL RECEIVED INSPECTED</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="inventory_2">inventory_2</span>
+</div>
+<div class="my-2">
+<span class="font-metric-val text-metric-val text-on-surface">780</span>
+<span class="font-label-code text-label-code text-on-surface-variant ml-1">UNITS</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Audit Sampling</span>
+<span class="font-label-code text-label-code text-primary font-medium">100% BATCH CHECK</span>
+</div>
+</div>
+<!-- KPI 2: Accepted Finished Goods -->
+<div class="bg-surface-container-lowest border border-tertiary/30 p-4 rounded flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-tertiary"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-tertiary uppercase">ACCEPTED (FINISHED GOODS)</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]" data-icon="check_circle">check_circle</span>
+</div>
+<div class="my-2">
+<span class="font-metric-val text-metric-val text-tertiary">740</span>
+<span class="font-label-code text-label-code text-tertiary ml-1">UNITS</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Pass Yield</span>
+<span class="h-5 px-1.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-label-code text-label-code font-bold flex items-center">
+              94.87% PASS
+            </span>
+</div>
+</div>
+<!-- KPI 3: Rejected / Quarantined -->
+<div class="bg-surface-container-lowest border border-error/30 p-4 rounded flex flex-col justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-1 bg-error"></div>
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-error uppercase">REJECTED (BAY 4 RACK)</span>
+<span class="material-symbols-outlined text-error text-[18px]" data-icon="warning">warning</span>
+</div>
+<div class="my-2">
+<span class="font-metric-val text-metric-val text-error">40</span>
+<span class="font-label-code text-label-code text-error ml-1">UNITS</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Segregation Rate</span>
+<span class="h-5 px-1.5 rounded bg-error-container text-on-error-container font-label-code text-label-code font-bold flex items-center">
+              5.13% REJECT
+            </span>
+</div>
+</div>
+<!-- KPI 4: Hardness Compliance Mean -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 p-4 rounded flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">HARDNESS COMPLIANCE</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]" data-icon="diamond">diamond</span>
+</div>
+<div class="my-2">
+<span class="font-metric-val text-metric-val text-on-surface">59.8</span>
+<span class="font-label-code text-label-code text-on-surface-variant ml-1">HRC MEAN</span>
+</div>
+<div class="flex items-center justify-between text-body-sm font-body-sm text-on-surface-variant">
+<span>Spec Window</span>
+<span class="font-label-code text-label-code text-on-surface font-medium">58.0 - 62.0 HRC</span>
+</div>
+</div>
+<!-- KPI 5: Usable Stock Dispatch Ready -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 p-4 rounded flex flex-col justify-between bg-gradient-to-b from-surface-container-lowest to-surface-container-low">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">DISPATCH READY STOCK</span>
+<span class="material-symbols-outlined text-primary text-[18px]" data-icon="forklift">forklift</span>
+</div>
+<div class="my-2 flex items-baseline">
+<span class="font-metric-val text-metric-val text-primary">740</span>
+<span class="font-label-code text-label-code text-primary ml-1">NET USABLE</span>
+</div>
+<div class="flex items-center text-[10px] font-label-code text-error leading-tight font-medium">
+            Strictly excludes 40 quarantined
+          </div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- INSPECTION BREAKDOWN & METALLURGICAL TEST SPEC TABLE                  -->
+<!-- ===================================================================== -->
+<section class="bg-surface-container-lowest border border-outline-variant/60 rounded flex flex-col overflow-hidden">
+<!-- Table Control Toolbar -->
+<div class="px-4 py-3 border-b border-surface-container-highest flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+<div class="flex items-center gap-2">
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Metallurgical Lab Specifications &amp; Quality Parameters</h2>
+<span class="h-5 px-2 bg-surface-container text-on-surface-variant rounded font-label-code text-label-code flex items-center">
+              ISO 9001 / IATF 16949 COMPLIANT
+            </span>
+</div>
+<div class="flex items-center gap-2">
+<button class="h-7 px-2.5 rounded bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]" data-icon="filter_list">filter_list</span>
+<span>Filter Parameters</span>
+</button>
+<button class="h-7 px-2.5 rounded bg-surface-container-lowest border border-outline-variant text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm flex items-center gap-1 transition-colors">
+<span class="material-symbols-outlined text-[14px]" data-icon="download">download</span>
+<span>Raw CSV Log</span>
+</button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="h-8 bg-surface-container-low border-b border-surface-container-highest text-on-surface-variant font-label-code text-label-code uppercase tracking-wider">
+<th class="px-4 font-medium">Inspection Parameter</th>
+<th class="px-4 font-medium">Design Spec / Standard</th>
+<th class="px-4 font-medium">Tested Sample Value</th>
+<th class="px-4 font-medium text-right">Sample (n)</th>
+<th class="px-4 font-medium text-right">Defect Units</th>
+<th class="px-4 font-medium text-center">Disposition</th>
+<th class="px-4 font-medium">Lab Instrument ID</th>
+<th class="px-4 font-medium text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high font-body-md text-body-md">
+<!-- Row 1: Surface Hardness (Rockwell C) - FAILED -->
+<tr class="h-9 hover:bg-error-container/20 transition-colors bg-error-container/5">
+<td class="px-4 py-2 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[16px]" data-icon="error">error</span>
+<span>Surface Hardness (Rockwell C)</span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">58.0 - 62.0 HRC</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<span class="font-label-code font-bold text-error">54.2 HRC</span>
+<span class="h-4 px-1 rounded bg-error-container text-on-error-container font-label-code text-[10px]">UNDER-SPEC SOFT</span>
+</div>
+</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface">n = 780</td>
+<td class="px-4 py-2 font-label-code text-right font-bold text-error">40 units</td>
+<td class="px-4 py-2 text-center">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-error-container text-on-error-container border border-error/30 font-label-code text-label-code font-bold uppercase">
+                    REJECT / QUARANTINE
+                  </span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">MITUTOYO-HR-820 #3</td>
+<td class="px-4 py-2 text-right">
+<button class="text-primary hover:text-primary-container font-body-sm text-body-sm font-semibold inline-flex items-center gap-0.5">
+<span>View NCR</span>
+<span class="material-symbols-outlined text-[14px]" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</td>
+</tr>
+<!-- Row 2: Case Depth (Effective) -->
+<tr class="h-9 hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-2 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]" data-icon="check">check</span>
+<span>Case Depth (Effective at 50 HRC)</span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">0.80 - 1.10 mm</td>
+<td class="px-4 py-2">
+<div class="flex items-center gap-2">
+<span class="font-label-code text-on-surface">0.94 mm</span>
+<!-- Inline Tolerance Micro-bar -->
+<div class="w-12 h-1.5 bg-surface-container-high rounded-full overflow-hidden flex" title="Optimal Center Range">
+<div class="w-1/3 bg-transparent"></div>
+<div class="w-1/3 bg-tertiary rounded-full"></div>
+<div class="w-1/3 bg-transparent"></div>
+</div>
+</div>
+</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface">n = 20</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface-variant">0</td>
+<td class="px-4 py-2 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed border border-tertiary/20 font-label-code text-label-code font-semibold">
+                    PASS
+                  </span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">SHIMADZU-HMV-G21</td>
+<td class="px-4 py-2 text-right">
+<button class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm">Details</button>
+</td>
+</tr>
+<!-- Row 3: Microstructure (Martensite) -->
+<tr class="h-9 hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-2 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]" data-icon="check">check</span>
+<span>Microstructure (Grain &amp; Phase)</span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">ASTM E112 Grade 7+</td>
+<td class="px-4 py-2 font-label-code text-on-surface">
+                  Grade 8 (Tempered Martensite)
+                </td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface">n = 5</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface-variant">0</td>
+<td class="px-4 py-2 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed border border-tertiary/20 font-label-code text-label-code font-semibold">
+                    PASS
+                  </span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">OLYMPUS-GX53-MET</td>
+<td class="px-4 py-2 text-right">
+<button class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm">Details</button>
+</td>
+</tr>
+<!-- Row 4: Dimensional Run-out -->
+<tr class="h-9 hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-2 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]" data-icon="check">check</span>
+<span>Dimensional Run-out (Radial TIR)</span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">&lt; 0.015 mm</td>
+<td class="px-4 py-2 font-label-code text-on-surface">0.008 mm</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface">n = 80</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface-variant">0</td>
+<td class="px-4 py-2 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed border border-tertiary/20 font-label-code text-label-code font-semibold">
+                    PASS
+                  </span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">MAHR-ROUNDTEST-RA</td>
+<td class="px-4 py-2 text-right">
+<button class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm">Details</button>
+</td>
+</tr>
+<!-- Row 5: Visual & Decarb Inspection -->
+<tr class="h-9 hover:bg-surface-container-low transition-colors">
+<td class="px-4 py-2 font-medium text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[16px]" data-icon="check">check</span>
+<span>Surface Decarb &amp; Oxide Scale</span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">Zero Pitting, Zero Decarb</td>
+<td class="px-4 py-2 font-label-code text-on-surface">Clean (Grade A Luster)</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface">n = 780</td>
+<td class="px-4 py-2 font-label-code text-right text-on-surface-variant">0</td>
+<td class="px-4 py-2 text-center">
+<span class="inline-flex items-center px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed border border-tertiary/20 font-label-code text-label-code font-semibold">
+                    PASS
+                  </span>
+</td>
+<td class="px-4 py-2 font-label-code text-on-surface-variant">VISUAL-STATION-4</td>
+<td class="px-4 py-2 text-right">
+<button class="text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm">Details</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Summary / Footer Status Banner -->
+<div class="px-4 py-2.5 bg-surface-container-low border-t border-surface-container-highest flex flex-col md:flex-row justify-between items-center text-body-sm font-body-sm text-on-surface-variant gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-tertiary" data-icon="task_alt">task_alt</span>
+<span>4 of 5 Metallurgical and dimensional parameters fully compliant.</span>
+</div>
+<div class="font-label-code text-label-code">
+            Total Unit Sampling: <span class="font-bold text-on-surface">780 / 780</span> (100% verified)
+          </div>
+</div>
+</section>
+<!-- ===================================================================== -->
+<!-- REJECTION DISPOSITION & QUARANTINE SEGREGATION SECTION                -->
+<!-- ===================================================================== -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+<!-- Left 2 Cols: Non-Conformance Report & Vendor Root Cause Detail -->
+<div class="lg:col-span-2 bg-surface-container-lowest border border-error/30 rounded p-5 flex flex-col justify-between">
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between border-b border-surface-container-highest pb-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[22px]" data-icon="report">report</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Non-Conformance Report (NCR #NCR-2025-089)</h3>
+<span class="font-label-code text-label-code text-on-surface-variant">Generated Automatically upon Hardness Floor Trip</span>
+</div>
+</div>
+<span class="h-6 px-2 rounded bg-error-container text-on-error-container font-label-code text-label-code font-bold flex items-center">
+                ACTION REQUIRED
+              </span>
+</div>
+<!-- Discrepancy Narrative -->
+<div class="bg-surface-container-low p-3 rounded border border-outline-variant/40 font-body-md text-body-md">
+<p class="text-on-surface leading-relaxed">
+<strong class="font-medium text-error">Finding:</strong> 40 units from Pallet 14 / Sub-lot <span class="font-label-code font-semibold">HT-402-D</span> exhibited core hardness below 58.0 HRC threshold (observed mean: <span class="font-label-code font-bold text-error">54.2 HRC</span>).
+              </p>
+<p class="text-on-surface-variant mt-1.5 leading-relaxed">
+<strong class="font-medium text-on-surface">Vendor Telemetry Root Cause:</strong> Furnace Zone 2 thermocouple fluctuation detected at vendor facility during soaking cycle timestamp <span class="font-label-code text-on-surface">2025-05-23 23:14 IST</span>. Core quench cooling rate fell below critical transformation speed.
+              </p>
+</div>
+<!-- Disposition Choices -->
+<div class="flex flex-col gap-2 mt-1">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Recommended Engineering Disposition</span>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+<!-- Choice 1: Rework -->
+<label class="flex items-start gap-3 p-3 rounded border border-primary-container bg-primary-fixed/20 cursor-pointer">
+<input checked="" class="mt-0.5 text-primary-container focus:ring-primary-container" name="disposition_choice" type="radio"/>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md font-semibold text-on-surface">Rework: Re-temper &amp; Re-quench</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Return 40 units to Bay 4B thermal line for localized induction reheat at vendor expense.</span>
+<span class="font-label-code text-label-code text-primary font-medium mt-1">VENDOR LIABILITY (Kalyani Thermal)</span>
+</div>
+</label>
+<!-- Choice 2: Scrap Debit -->
+<label class="flex items-start gap-3 p-3 rounded border border-outline-variant hover:border-error bg-surface-container-lowest cursor-pointer transition-colors">
+<input class="mt-0.5 text-error focus:ring-error" name="disposition_choice" type="radio"/>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-md font-semibold text-on-surface">Total Scrap Debit Note</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Melt-down discard. Deduct ₹18,400 raw material casting charges from monthly vendor payout.</span>
+<span class="font-label-code text-label-code text-error font-medium mt-1">SCRAP SEGREGATION</span>
+</div>
+</label>
+</div>
+</div>
+</div>
+<div class="mt-5 pt-3 border-t border-surface-container-highest flex items-center justify-between">
+<span class="font-label-code text-label-code text-on-surface-variant">Approver: QC Manager #04 (Pending Digital Sign)</span>
+<div class="flex items-center gap-2">
+<button class="h-8 px-3 rounded bg-surface-container-lowest border border-outline-variant text-on-surface font-body-sm text-body-sm hover:bg-surface-container-low transition-colors">
+                Print Quarantine Slip
+              </button>
+<button class="h-8 px-3.5 rounded bg-primary-container hover:bg-primary text-on-primary font-body-sm text-body-sm font-medium transition-colors">
+                Authorize Disposition
+              </button>
+</div>
+</div>
+</div>
+<!-- Right Col: Physical Quarantine Bay Enforcement & Warehouse Lock -->
+<div class="bg-surface-container-lowest border border-outline-variant/60 rounded p-5 flex flex-col justify-between">
+<div class="flex flex-col gap-3">
+<div class="flex items-center gap-2 border-b border-surface-container-highest pb-3">
+<span class="material-symbols-outlined text-error text-[20px]" data-icon="lock">lock</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Segregation &amp; ERP Lock</h3>
+</div>
+<!-- Mandatory Warehouse Exclusion Callout -->
+<div class="bg-error-container/20 border-l-4 border-error p-3 rounded-r">
+<div class="flex items-center gap-1.5 text-error font-headline-sm text-body-md font-bold">
+<span class="material-symbols-outlined text-[18px]" data-icon="gpp_bad">gpp_bad</span>
+<span>PHYSICAL QUARANTINE ENFORCED</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-error-container mt-1 font-medium leading-relaxed">
+                REJECTED UNITS SEGREGATED TO BAY 4 RED RACK. These units are strictly NOT available in warehouse accepted stock.
+              </p>
+</div>
+<!-- Physical Tracking Metadata -->
+<div class="flex flex-col gap-2 font-label-code text-label-code bg-surface-container-low p-3 rounded">
+<div class="flex justify-between py-0.5 border-b border-surface-container-high">
+<span class="text-on-surface-variant">Physical Location:</span>
+<span class="text-on-surface font-bold">Bay 4 Quarantine / Shelf R-08</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-surface-container-high">
+<span class="text-on-surface-variant">Lock Tag UID:</span>
+<span class="text-on-surface font-bold text-error">#QTAG-HT402-40X</span>
+</div>
+<div class="flex justify-between py-0.5 border-b border-surface-container-high">
+<span class="text-on-surface-variant">ERP Inventory State:</span>
+<span class="text-error font-bold">LOCKED_NON_COMMERCE</span>
+</div>
+<div class="flex justify-between py-0.5">
+<span class="text-on-surface-variant">Floor Security Seal:</span>
+<span class="text-tertiary font-bold">APPLIED (SEAL #9942)</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic">
+              Dispatch clearance barcode generation is disabled for this sub-lot until the NCR is officially resolved and stamped.
+            </p>
+</div>
+<div class="pt-3 border-t border-surface-container-highest">
+<button class="w-full h-8 rounded border border-outline-variant bg-surface-container-lowest hover:bg-surface-container-low text-on-surface font-body-sm text-body-sm flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined text-[16px]" data-icon="qr_code_scanner">qr_code_scanner</span>
+<span>Re-Scan Shelf RFID Tag</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

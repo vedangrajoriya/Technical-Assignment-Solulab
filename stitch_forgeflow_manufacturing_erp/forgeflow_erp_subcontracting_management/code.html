@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ForgeFlow ERP - Subcontracting Operations &amp; Vendor Tracking</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Geist and JetBrains Mono Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-container": "#007d57",
+            "inverse-surface": "#2c3039",
+            "tertiary-fixed": "#85f8c4",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container": "#ebedfa",
+            "on-primary-fixed-variant": "#003ea8",
+            "on-secondary-container": "#006172",
+            "error-container": "#ffdad6",
+            "surface-tint": "#0053db",
+            "tertiary-fixed-dim": "#68dba9",
+            "background": "#f9f9ff",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dbe1ff",
+            "on-background": "#181c24",
+            "on-secondary-fixed": "#001f26",
+            "surface-container-high": "#e5e8f4",
+            "on-surface": "#181c24",
+            "surface-dim": "#d7dae5",
+            "on-error": "#ffffff",
+            "on-surface-variant": "#434655",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c3c6d7",
+            "secondary-fixed": "#acedff",
+            "surface-variant": "#dfe2ee",
+            "primary-container": "#2563eb",
+            "on-primary-fixed": "#00174b",
+            "secondary-fixed-dim": "#4cd7f6",
+            "secondary-container": "#57dffe",
+            "on-tertiary-container": "#bdffdc",
+            "on-secondary-fixed-variant": "#004e5c",
+            "on-tertiary-fixed-variant": "#005137",
+            "primary": "#004ac6",
+            "on-primary-container": "#eeefff",
+            "inverse-on-surface": "#eef0fc",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f1f3ff",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#b4c5ff",
+            "surface-container-highest": "#dfe2ee",
+            "outline": "#737686",
+            "surface-bright": "#f9f9ff",
+            "inverse-primary": "#b4c5ff",
+            "tertiary": "#006243",
+            "secondary": "#00687a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem",
+            "gutter-mobile": "0.75rem",
+            "space-2xs": "0.125rem",
+            "margin-mobile": "1rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Geist"],
+            "headline-sm": ["Geist"],
+            "label-code": ["JetBrains Mono"],
+            "headline-md": ["Geist"],
+            "headline-lg": ["Geist"],
+            "body-md": ["Geist"],
+            "label-caps": ["Geist"],
+            "body-sm": ["Geist"],
+            "display-lg-mobile": ["Geist"],
+            "metric-val": ["JetBrains Mono"],
+            "display-lg": ["Geist"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-code": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "metric-val": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 1;
+    }
+    /* Tabular nums rule for industrial tables */
+    .tabular-numbers {
+      font-feature-settings: "tnum" 1;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased min-h-screen flex flex-col font-body-md text-body-md selection:bg-primary selection:text-on-primary">
+<!-- ======================================================== -->
+<!-- SHARED COMPONENT 1: SideNavBar                          -->
+<!-- ======================================================== -->
+<aside class="fixed top-0 bottom-0 left-0 w-60 z-40 bg-inverse-surface border-r border-outline flex flex-col h-full justify-between p-4">
+<!-- Top Area: Brand & Subtext -->
+<div class="flex flex-col gap-4">
+<div class="flex items-center gap-2.5 px-1 py-1">
+<div class="w-8 h-8 rounded bg-primary-container text-white flex items-center justify-center font-bold tracking-tight text-body-lg">
+          FF
+        </div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-inverse-on-surface tracking-tight">ForgeFlow ERP</span>
+<span class="font-body-sm text-body-sm text-outline-variant">Apex Auto Components</span>
+</div>
+</div>
+<!-- CTA -->
+<button class="w-full flex items-center justify-center gap-2 py-2 px-3 rounded bg-primary-container hover:bg-primary text-white font-headline-sm text-headline-sm transition-colors duration-150 ease-in-out cursor-pointer shadow-sm">
+<span class="material-symbols-outlined" style="font-size: 18px;">local_shipping</span>
+<span>Quick Dispatch</span>
+</button>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1 mt-2">
+<!-- 0: Operations Overview (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#overview">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Operations Overview</span>
+</a>
+<!-- 1: Dispatch & Gate (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#dispatch">
+<span class="material-symbols-outlined">local_shipping</span>
+<span>Dispatch &amp; Gate</span>
+</a>
+<!-- 2: Subcontractor BOM (ACTIVE mapped to Subcontracting Management) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-variant/10 text-inverse-on-surface border-l-2 border-primary-container font-headline-sm text-headline-sm rounded-r" href="#subcontracting">
+<span class="material-symbols-outlined text-primary-fixed">precision_manufacturing</span>
+<span>Subcontractor BOM</span>
+</a>
+<!-- 3: Reconciliation Audit (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#reconciliation">
+<span class="material-symbols-outlined">fact_check</span>
+<span>Reconciliation Audit</span>
+</a>
+<!-- 4: Scrap & Discrepancies (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#scrap">
+<span class="material-symbols-outlined">report_problem</span>
+<span>Scrap &amp; Discrepancies</span>
+</a>
+<!-- 5: Facility Settings (Inactive) -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded" href="#settings">
+<span class="material-symbols-outlined">tune</span>
+<span>Facility Settings</span>
+</a>
+</nav>
+</div>
+<!-- Bottom Footer Links -->
+<div class="flex flex-col gap-1 border-t border-outline/30 pt-3">
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-sm text-body-sm rounded" href="#diagnostics">
+<span class="material-symbols-outlined">dns</span>
+<span>System Diagnostics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-sm text-body-sm rounded" href="#audit-logs">
+<span class="material-symbols-outlined">history</span>
+<span>Audit Logs</span>
+</a>
+<div class="px-3 py-2 mt-1 flex items-center justify-between text-outline-variant font-label-code text-label-code">
+<span>v2.8.4-PRD</span>
+<span class="flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>PLC ON</span>
+</div>
+</div>
+</aside>
+<!-- ======================================================== -->
+<!-- SHARED COMPONENT 2: TopNavBar                           -->
+<!-- ======================================================== -->
+<header class="fixed top-0 left-60 right-0 h-14 z-30 bg-surface-container-lowest border-b border-surface-container-highest flex justify-between items-center px-6">
+<!-- Left: Breadcrumb / Identity & Search -->
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="font-label-code text-label-code uppercase tracking-wider text-on-surface-variant">ForgeFlow ERP / Operations / Subcontracting Management</span>
+</div>
+<!-- Search Input on Left -->
+<div class="relative w-72">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline text-[16px]">search</span>
+<input class="w-full h-8 pl-8 pr-3 text-body-sm bg-surface-container-low border border-outline-variant rounded focus:outline-none focus:border-primary-container focus:ring-1 focus:ring-primary-container text-on-surface placeholder:text-outline" placeholder="Filter Job ID, Heat Lot, Challan #..." type="text"/>
+</div>
+</div>
+<!-- Right: Actions, Notifications, Help, Profile -->
+<div class="flex items-center gap-3">
+<!-- Trailing Action 1: Secondary -->
+<button class="h-8 px-3 rounded border border-outline-variant bg-surface-container-lowest hover:bg-surface-container text-on-surface font-body-md text-body-md flex items-center gap-1.5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined" style="font-size: 16px;">file_download</span>
+<span>Export Ledger</span>
+</button>
+<!-- Trailing Action 2: Primary -->
+<button class="h-8 px-3 rounded bg-primary-container hover:bg-primary text-white font-headline-sm text-headline-sm flex items-center gap-1.5 transition-colors cursor-pointer">
+<span class="material-symbols-outlined" style="font-size: 16px;">add</span>
+<span>+ Issue Subcontract Challan</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant mx-1"></div>
+<!-- Icon Actions -->
+<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors relative" title="Notifications">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-error rounded-full"></span>
+</button>
+<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" title="Help &amp; Specs">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<!-- User Profile -->
+<div class="flex items-center gap-2 pl-2 border-l border-outline-variant">
+<div class="w-7 h-7 rounded bg-inverse-surface text-inverse-on-surface flex items-center justify-center text-xs font-semibold" title="Chief Plant Controller Avatar">
+          CP
+        </div>
+<div class="flex flex-col text-left">
+<span class="font-headline-sm text-body-sm leading-tight text-on-surface">R. Deshmukh</span>
+<span class="font-label-code text-[10px] text-outline">Chief Plant Controller</span>
+</div>
+</div>
+</div>
+</header>
+<!-- ======================================================== -->
+<!-- MAIN WORKSPACE CANVAS                                   -->
+<!-- ======================================================== -->
+<main class="ml-60 pt-14 p-6 min-h-screen bg-background flex flex-col gap-5 max-w-[1760px]">
+<!-- PAGE HEADER & ACTIVE SUB-LOT METADATA -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-1">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Subcontracting Operations &amp; Vendor Tracking</h1>
+<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-surface-container-high border border-outline-variant font-label-code text-label-code text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-cyan-600 animate-pulse"></span>
+            ACTIVE LOT RUNNING
+          </span>
+</div>
+<div class="flex items-center gap-3 mt-1.5 text-body-sm text-on-surface-variant">
+<span class="font-label-code text-label-code text-on-surface font-semibold bg-surface-container px-2 py-0.5 rounded border border-outline-variant">JOB-HT-2025-0842</span>
+<span>•</span>
+<span class="font-medium text-on-surface">Vendor: Precision Heat Processors Ltd. (Vendor ID: V-40192)</span>
+<span>•</span>
+<span class="text-outline">ISO 9001 / IATF 16949 Certified</span>
+</div>
+</div>
+<!-- Top Utility / Batch Indicator -->
+<div class="flex items-center gap-2">
+<div class="text-right">
+<div class="font-label-code text-[11px] text-outline">OUTWARD CHALLAN</div>
+<div class="font-label-code text-body-sm font-semibold text-on-surface tabular-numbers">PHP/25/0814</div>
+</div>
+<div class="h-6 w-[1px] bg-outline-variant mx-1"></div>
+<div class="text-right">
+<div class="font-label-code text-[11px] text-outline">DISPATCH DATE</div>
+<div class="font-label-code text-body-sm text-on-surface">2025-10-14 09:30 IST</div>
+</div>
+</div>
+</div>
+<!-- FILTER BAR -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-2.5 flex flex-wrap items-center justify-between gap-3 shadow-sm">
+<div class="flex flex-wrap items-center gap-2 text-body-sm">
+<!-- Date range -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded">
+<span class="material-symbols-outlined text-[15px] text-outline">calendar_today</span>
+<span class="text-outline font-body-sm">Date:</span>
+<span class="font-medium text-on-surface">2025-10-10 to 2025-10-18</span>
+</div>
+<!-- Vendor Select -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded">
+<span class="material-symbols-outlined text-[15px] text-outline">business</span>
+<span class="text-outline font-body-sm">Vendor:</span>
+<span class="font-medium text-on-surface">Precision Heat Processors Ltd.</span>
+<span class="material-symbols-outlined text-[16px] text-outline ml-1">arrow_drop_down</span>
+</div>
+<!-- Subcontract PO -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded">
+<span class="material-symbols-outlined text-[15px] text-outline">receipt_long</span>
+<span class="text-outline font-body-sm">PO:</span>
+<span class="font-label-code text-on-surface font-semibold">PO-SUB-8812</span>
+</div>
+<!-- Heat Treatment Type -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded">
+<span class="material-symbols-outlined text-[15px] text-outline">local_fire_department</span>
+<span class="text-outline font-body-sm">HT Spec:</span>
+<span class="font-medium text-on-surface">Case Carburizing (58-62 HRC)</span>
+</div>
+<!-- Status Filter -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container-low border border-outline-variant rounded">
+<span class="text-outline font-body-sm">Status:</span>
+<span class="inline-block w-2 h-2 rounded-full bg-amber-500"></span>
+<span class="font-medium text-on-surface">Partial Dispatch (80%)</span>
+<span class="material-symbols-outlined text-[16px] text-outline ml-1">arrow_drop_down</span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-2.5 py-1 text-body-sm text-on-surface-variant hover:text-on-surface border border-outline-variant rounded hover:bg-surface-container transition-colors">
+          Reset Filters
+        </button>
+<button class="px-2.5 py-1 text-body-sm text-primary-container hover:bg-primary-fixed/20 border border-primary-container/40 rounded transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">sync</span>
+<span>Sync Telemetry</span>
+</button>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- KPI SUMMARY RIBBON                                      -->
+<!-- ======================================================== -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
+<!-- Metric 1: Total Sent -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline">TOTAL SENT TO VENDOR</span>
+<span class="material-symbols-outlined text-outline text-[18px]">output</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<div class="font-metric-val text-metric-val text-on-surface tabular-numbers">
+            1,000 <span class="text-body-sm font-normal text-outline">units</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant font-label-code text-[10px]">
+            Challan #PHP/25/0814
+          </span>
+</div>
+<div class="mt-2 text-body-sm text-outline flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary-container"></span>
+<span>100% of Issued Subcontract Lot</span>
+</div>
+</div>
+<!-- Metric 2: Vendor Dispatched -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline">VENDOR DISPATCHED</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">local_shipping</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<div class="font-metric-val text-metric-val text-tertiary tabular-numbers">
+            800 <span class="text-body-sm font-normal text-outline">units</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-label-code text-[10px]">
+            80.0% RECOVERED
+          </span>
+</div>
+<div class="mt-2 text-body-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+<span>4 of 5 Sub-Lots in Transit</span>
+</div>
+</div>
+<!-- Metric 3: Balance on Floor -->
+<div class="bg-surface-container-lowest border border-amber-300 rounded p-4 flex flex-col justify-between shadow-sm bg-amber-50/20">
+<div class="flex items-center justify-between">
+<span class="font-label-code text-label-code uppercase tracking-wider text-amber-900 font-semibold">BALANCE ON VENDOR FLOOR</span>
+<span class="material-symbols-outlined text-amber-700 text-[18px]">timelapse</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<div class="font-metric-val text-metric-val text-amber-900 tabular-numbers">
+            200 <span class="text-body-sm font-normal text-amber-700">units</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-label-code text-[10px] font-semibold">
+            CYCLE #3 RUNNING
+          </span>
+</div>
+<div class="mt-2 text-body-sm text-amber-800 flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">info</span>
+<span class="truncate">Pending Vacuum Furnace #3</span>
+</div>
+</div>
+<!-- Metric 4: SLA Delivery Due -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline">DELIVERY SLA TARGET</span>
+<span class="material-symbols-outlined text-outline text-[18px]">timer</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<div class="font-metric-val text-metric-val text-on-surface tabular-numbers">
+            2 Days <span class="text-body-sm font-normal text-outline">left</span>
+</div>
+<span class="px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 border border-blue-200 font-label-code text-[10px]">
+            ON SCHEDULE
+          </span>
+</div>
+<div class="mt-2 text-body-sm text-outline flex items-center justify-between">
+<span>Target: 2025-10-18</span>
+<span class="font-label-code text-[11px] text-on-surface">18:00 IST</span>
+</div>
+</div>
+<!-- Metric 5: Vendor Compliance -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded p-4 flex flex-col justify-between shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-code text-label-code uppercase tracking-wider text-outline">VENDOR COMPLIANCE</span>
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified</span>
+</div>
+<div class="mt-2 flex items-baseline justify-between">
+<div class="font-metric-val text-metric-val text-on-surface tabular-numbers">
+            88.5%
+          </div>
+<span class="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-label-code text-[10px]">
+            TIER-A APPROVED
+          </span>
+</div>
+<div class="mt-2 flex items-center justify-between text-body-sm text-outline">
+<span>Reject rate: 0.12%</span>
+<span class="text-tertiary font-medium">OTIF: 96.4%</span>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- PROCESS FLOW STEPPER                                     -->
+<!-- ======================================================== -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded px-6 py-3.5 shadow-sm">
+<div class="flex items-center justify-between">
+<!-- Step 1: Dispatched -->
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-label-code text-xs font-semibold">✓</div>
+<div>
+<div class="font-label-code text-label-code text-outline uppercase">STAGE 1: PLANT DISPATCH</div>
+<div class="font-headline-sm text-body-md text-on-surface">1,000 Pcs Outwarded</div>
+</div>
+</div>
+<div class="h-[2px] flex-1 bg-emerald-500 mx-4"></div>
+<!-- Step 2: Vendor Gate Entry -->
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-emerald-600 text-white flex items-center justify-center font-label-code text-xs font-semibold">✓</div>
+<div>
+<div class="font-label-code text-label-code text-outline uppercase">STAGE 2: VENDOR GATE IN</div>
+<div class="font-headline-sm text-body-md text-on-surface">Received &amp; Inspected</div>
+</div>
+</div>
+<div class="h-[2px] flex-1 bg-emerald-500 mx-4"></div>
+<!-- Step 3: Heat Treatment Cycles -->
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-amber-500 text-white flex items-center justify-center font-label-code text-xs font-semibold animate-pulse">3</div>
+<div>
+<div class="font-label-code text-label-code text-amber-700 font-semibold uppercase">STAGE 3: HEAT TREATMENT</div>
+<div class="font-headline-sm text-body-md text-amber-900">800 Done / 200 In-Furnace</div>
+</div>
+</div>
+<div class="h-[2px] flex-1 bg-outline-variant mx-4"></div>
+<!-- Step 4: Outward & In-Transit -->
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-primary-container text-white flex items-center justify-center font-label-code text-xs font-semibold">4</div>
+<div>
+<div class="font-label-code text-label-code text-primary-container font-semibold uppercase">STAGE 4: TRUCK IN-TRANSIT</div>
+<div class="font-headline-sm text-body-md text-on-surface">800 Units on MH-12-Q-4112</div>
+</div>
+</div>
+<div class="h-[2px] flex-1 bg-outline-variant mx-4"></div>
+<!-- Step 5: Apex Receiving & Reconciliation -->
+<div class="flex items-center gap-3 opacity-60">
+<div class="w-7 h-7 rounded-full bg-surface-container-high border border-outline text-outline flex items-center justify-center font-label-code text-xs font-semibold">5</div>
+<div>
+<div class="font-label-code text-label-code text-outline uppercase">STAGE 5: APEX RECONCILIATION</div>
+<div class="font-body-md text-body-md text-outline">Pending Truck Arrival</div>
+</div>
+</div>
+</div>
+</div>
+<!-- ======================================================== -->
+<!-- MAIN WORKFLOW SPLIT VIEW                                 -->
+<!-- ======================================================== -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-5 items-start">
+<!-- ====================================================== -->
+<!-- SECTION 1: CHALLAN & LINE ITEMS TABLE (8 COLUMNS)      -->
+<!-- ====================================================== -->
+<section class="xl:col-span-8 bg-surface-container-lowest border border-outline-variant rounded shadow-sm overflow-hidden flex flex-col">
+<!-- Table Control Header -->
+<div class="px-5 py-3.5 border-b border-surface-container-highest flex items-center justify-between bg-surface-container-lowest">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-primary-container">list_alt</span>
+<h2 class="font-headline-md text-headline-sm text-on-surface">Subcontract PO Line Items &amp; Sub-Lot Reconciliation</h2>
+<span class="font-label-code text-label-code bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">5 Sub-Lots (200 units/lot)</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-code text-label-code text-outline">RECONCILIATION STATUS:</span>
+<span class="px-2 py-0.5 rounded bg-amber-50 text-amber-800 border border-amber-300 font-label-code text-label-code font-semibold">
+              800 / 1,000 RECONCILED
+            </span>
+</div>
+</div>
+<!-- High-Density Data Table -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse tabular-numbers">
+<thead>
+<tr class="h-8 bg-surface-container-low border-b border-outline-variant font-label-code text-label-code uppercase text-on-surface-variant">
+<th class="px-3 py-2 w-12 text-center">LN#</th>
+<th class="px-3 py-2">SUB-LOT ID</th>
+<th class="px-3 py-2">COMPONENT &amp; SPEC</th>
+<th class="px-3 py-2 text-right">SENT QTY</th>
+<th class="px-3 py-2 text-right">DISPATCHED</th>
+<th class="px-3 py-2">FURNACE BATCH</th>
+<th class="px-3 py-2">STATUS</th>
+<th class="px-3 py-2 text-center">ACTIONS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high font-body-md text-body-md text-on-surface">
+<!-- Row 1: Lot 1 (Dispatched / In Transit) -->
+<tr class="hover:bg-surface-container-low transition-colors h-11">
+<td class="px-3 py-2 text-center font-label-code text-outline">01</td>
+<td class="px-3 py-2 font-label-code font-semibold text-primary">
+                  LOT-25-8842-A
+                  <div class="font-label-code text-[10px] text-outline font-normal">HEAT: HT-EN353-841</div>
+</td>
+<td class="px-3 py-2">
+<div class="font-medium text-on-surface">Pinion Shaft AAC-8842-HT</div>
+<div class="font-label-code text-[10px] text-outline">58-62 HRC | 0.8-1.1mm Case</div>
+</td>
+<td class="px-3 py-2 text-right font-label-code font-medium">200</td>
+<td class="px-3 py-2 text-right font-label-code font-semibold text-tertiary">200</td>
+<td class="px-3 py-2">
+<span class="font-label-code text-[11px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface">VF-BATCH-901</span>
+</td>
+<td class="px-3 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-label-code text-label-code">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-600"></span>
+                    In-Transit
+                  </span>
+</td>
+<td class="px-3 py-2 text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="View Annexure">
+<span class="material-symbols-outlined text-[17px]">description</span>
+</button>
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="Dispatch Slip">
+<span class="material-symbols-outlined text-[17px]">local_shipping</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Lot 2 (Dispatched / In Transit) -->
+<tr class="hover:bg-surface-container-low transition-colors h-11">
+<td class="px-3 py-2 text-center font-label-code text-outline">02</td>
+<td class="px-3 py-2 font-label-code font-semibold text-primary">
+                  LOT-25-8842-B
+                  <div class="font-label-code text-[10px] text-outline font-normal">HEAT: HT-EN353-841</div>
+</td>
+<td class="px-3 py-2">
+<div class="font-medium text-on-surface">Pinion Shaft AAC-8842-HT</div>
+<div class="font-label-code text-[10px] text-outline">58-62 HRC | 0.8-1.1mm Case</div>
+</td>
+<td class="px-3 py-2 text-right font-label-code font-medium">200</td>
+<td class="px-3 py-2 text-right font-label-code font-semibold text-tertiary">200</td>
+<td class="px-3 py-2">
+<span class="font-label-code text-[11px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface">VF-BATCH-901</span>
+</td>
+<td class="px-3 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-label-code text-label-code">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-600"></span>
+                    In-Transit
+                  </span>
+</td>
+<td class="px-3 py-2 text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="View Annexure">
+<span class="material-symbols-outlined text-[17px]">description</span>
+</button>
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="Dispatch Slip">
+<span class="material-symbols-outlined text-[17px]">local_shipping</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Lot 3 (Dispatched / In Transit) -->
+<tr class="hover:bg-surface-container-low transition-colors h-11">
+<td class="px-3 py-2 text-center font-label-code text-outline">03</td>
+<td class="px-3 py-2 font-label-code font-semibold text-primary">
+                  LOT-25-8842-C
+                  <div class="font-label-code text-[10px] text-outline font-normal">HEAT: HT-EN353-842</div>
+</td>
+<td class="px-3 py-2">
+<div class="font-medium text-on-surface">Pinion Shaft AAC-8842-HT</div>
+<div class="font-label-code text-[10px] text-outline">58-62 HRC | 0.8-1.1mm Case</div>
+</td>
+<td class="px-3 py-2 text-right font-label-code font-medium">200</td>
+<td class="px-3 py-2 text-right font-label-code font-semibold text-tertiary">200</td>
+<td class="px-3 py-2">
+<span class="font-label-code text-[11px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface">VF-BATCH-902</span>
+</td>
+<td class="px-3 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-label-code text-label-code">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-600"></span>
+                    In-Transit
+                  </span>
+</td>
+<td class="px-3 py-2 text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="View Annexure">
+<span class="material-symbols-outlined text-[17px]">description</span>
+</button>
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="Dispatch Slip">
+<span class="material-symbols-outlined text-[17px]">local_shipping</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Lot 4 (Dispatched / In Transit) -->
+<tr class="hover:bg-surface-container-low transition-colors h-11">
+<td class="px-3 py-2 text-center font-label-code text-outline">04</td>
+<td class="px-3 py-2 font-label-code font-semibold text-primary">
+                  LOT-25-8842-D
+                  <div class="font-label-code text-[10px] text-outline font-normal">HEAT: HT-EN353-842</div>
+</td>
+<td class="px-3 py-2">
+<div class="font-medium text-on-surface">Pinion Shaft AAC-8842-HT</div>
+<div class="font-label-code text-[10px] text-outline">58-62 HRC | 0.8-1.1mm Case</div>
+</td>
+<td class="px-3 py-2 text-right font-label-code font-medium">200</td>
+<td class="px-3 py-2 text-right font-label-code font-semibold text-tertiary">200</td>
+<td class="px-3 py-2">
+<span class="font-label-code text-[11px] bg-surface-container px-1.5 py-0.5 rounded text-on-surface">VF-BATCH-902</span>
+</td>
+<td class="px-3 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-cyan-50 text-cyan-800 border border-cyan-200 font-label-code text-label-code">
+<span class="w-1.5 h-1.5 rounded-full bg-cyan-600"></span>
+                    In-Transit
+                  </span>
+</td>
+<td class="px-3 py-2 text-center">
+<div class="flex items-center justify-center gap-1">
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="View Annexure">
+<span class="material-symbols-outlined text-[17px]">description</span>
+</button>
+<button class="p-1 hover:bg-surface-container rounded text-outline hover:text-on-surface" title="Dispatch Slip">
+<span class="material-symbols-outlined text-[17px]">local_shipping</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Lot 5 (PENDING BALANCE: 200 UNITS) -->
+<tr class="bg-amber-50/40 hover:bg-amber-50/70 transition-colors h-11 border-l-2 border-l-amber-500">
+<td class="px-3 py-2 text-center font-label-code text-amber-800 font-semibold">05</td>
+<td class="px-3 py-2 font-label-code font-semibold text-amber-900">
+                  LOT-25-8842-E
+                  <div class="font-label-code text-[10px] text-amber-700 font-normal">HEAT: HT-EN353-843</div>
+</td>
+<td class="px-3 py-2">
+<div class="font-medium text-amber-950">Pinion Shaft AAC-8842-HT</div>
+<div class="font-label-code text-[10px] text-amber-800">58-62 HRC | 0.8-1.1mm Case</div>
+</td>
+<td class="px-3 py-2 text-right font-label-code font-medium">200</td>
+<td class="px-3 py-2 text-right font-label-code font-bold text-amber-800">0</td>
+<td class="px-3 py-2">
+<span class="font-label-code text-[11px] bg-amber-100 text-amber-900 border border-amber-300 px-1.5 py-0.5 rounded">
+                    VF-BATCH-903 (ACTIVE)
+                  </span>
+</td>
+<td class="px-3 py-2">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-amber-100 text-amber-900 border border-amber-300 font-label-code text-label-code font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-ping"></span>
+                    Processing (Quench)
+                  </span>
+</td>
+<td class="px-3 py-2 text-center">
+<button class="px-2 py-0.5 bg-amber-600 hover:bg-amber-700 text-white rounded font-label-code text-[10px] font-semibold transition-colors" onclick="document.getElementById('expedite-drawer').scrollIntoView({behavior: 'smooth'})">
+                    Expedite
+                  </button>
+</td>
+</tr>
+</tbody>
+<tfoot>
+<tr class="bg-surface-container-low font-headline-sm text-body-md border-t border-outline-variant">
+<td class="px-3 py-2 text-right font-label-code uppercase text-on-surface-variant" colspan="3">TOTAL SUMMATION:</td>
+<td class="px-3 py-2 text-right font-label-code font-bold text-on-surface">1,000</td>
+<td class="px-3 py-2 text-right font-label-code font-bold text-tertiary">800</td>
+<td class="px-3 py-2 font-label-code text-label-code text-amber-900" colspan="3">
+                  REMAINING BALANCE AT VENDOR: <span class="font-bold">200 UNITS</span> (Cycle #3)
+                </td>
+</tr>
+</tfoot>
+</table>
+</div>
+<!-- Metallurgy & Hardness Tolerance Spec Bar -->
+<div class="p-4 bg-surface-container-lowest border-t border-surface-container-highest">
+<div class="flex items-center justify-between mb-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">tune</span>
+<span class="font-label-code text-label-code uppercase text-outline">Metallurgical Quality Tolerance Spec: 58 - 62 HRC (Case Depth 0.8 - 1.1mm)</span>
+</div>
+<span class="font-label-code text-label-code text-tertiary font-semibold">100% SAMPLES WITHIN TOLERANCE</span>
+</div>
+<div class="grid grid-cols-5 gap-2 font-label-code text-[11px]">
+<div class="p-2 rounded bg-surface-container-low border border-outline-variant">
+<div class="text-outline">LOT-A HARDNESS</div>
+<div class="font-bold text-on-surface mt-0.5">59.8 HRC <span class="text-tertiary">✓ 0.95mm</span></div>
+</div>
+<div class="p-2 rounded bg-surface-container-low border border-outline-variant">
+<div class="text-outline">LOT-B HARDNESS</div>
+<div class="font-bold text-on-surface mt-0.5">60.2 HRC <span class="text-tertiary">✓ 1.02mm</span></div>
+</div>
+<div class="p-2 rounded bg-surface-container-low border border-outline-variant">
+<div class="text-outline">LOT-C HARDNESS</div>
+<div class="font-bold text-on-surface mt-0.5">61.0 HRC <span class="text-tertiary">✓ 0.88mm</span></div>
+</div>
+<div class="p-2 rounded bg-surface-container-low border border-outline-variant">
+<div class="text-outline">LOT-D HARDNESS</div>
+<div class="font-bold text-on-surface mt-0.5">60.5 HRC <span class="text-tertiary">✓ 0.98mm</span></div>
+</div>
+<div class="p-2 rounded bg-amber-50 border border-amber-300">
+<div class="text-amber-800">LOT-E (IN-FURNACE)</div>
+<div class="font-bold text-amber-900 mt-0.5">Soaking 920°C <span class="text-amber-700 animate-pulse">●</span></div>
+</div>
+</div>
+</div>
+</section>
+<!-- ====================================================== -->
+<!-- SECTION 2: LOGISTICS TELEMETRY & GPS (4 COLUMNS)       -->
+<!-- ====================================================== -->
+<section class="xl:col-span-4 flex flex-col gap-5">
+<!-- Live Transit Tracking Card -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded shadow-sm overflow-hidden">
+<div class="px-4 py-3 bg-surface-container-lowest border-b border-surface-container-highest flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-cyan-700">share_location</span>
+<h2 class="font-headline-md text-headline-sm text-on-surface">Vendor Dispatch Telemetry</h2>
+</div>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-50 text-emerald-800 border border-emerald-200 font-label-code text-[10px]">
+              GPS LIVE (2m ago)
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-3.5">
+<!-- Truck Metadata Header -->
+<div class="flex items-center justify-between p-3 rounded bg-surface-container-low border border-outline-variant">
+<div>
+<div class="font-label-code text-[10px] text-outline uppercase">ASSIGNED VEHICLE</div>
+<div class="font-headline-sm text-body-lg text-on-surface font-semibold tracking-wide">MH-12-Q-4112</div>
+<div class="font-body-sm text-outline mt-0.5">Tata Ultra 1518 (Dedicated Container)</div>
+</div>
+<div class="text-right">
+<div class="font-label-code text-[10px] text-outline uppercase">e-WAY BILL #</div>
+<div class="font-label-code text-body-sm font-semibold text-primary">eWB-991204812</div>
+<div class="font-label-code text-[10px] text-tertiary">VALID TO: 2025-10-17</div>
+</div>
+</div>
+<!-- Route Map Graphic Representation -->
+<div class="relative w-full h-32 bg-slate-900 rounded border border-outline-variant overflow-hidden flex flex-col justify-between p-3">
+<div class="absolute inset-0 opacity-20 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+<!-- Map Points -->
+<div class="relative z-10 flex items-center justify-between text-white font-label-code text-[11px]">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-cyan-400"></span>
+<span>PHP Chakan Plant (Vendor)</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span>Apex Auto Bhosari (Target)</span>
+</div>
+</div>
+<!-- Route Line & Moving Marker -->
+<div class="relative z-10 my-auto">
+<div class="w-full h-1.5 bg-slate-700 rounded-full overflow-hidden">
+<div class="h-full bg-cyan-400 w-3/4"></div>
+</div>
+<div class="flex justify-between items-center text-[10px] text-slate-300 font-label-code mt-1.5">
+<span>Departed: 11:20 AM</span>
+<span class="text-cyan-300 font-semibold">Current: Talwade Junction (ETA: 42 Mins)</span>
+<span>Dist: 18.4 km / 24 km</span>
+</div>
+</div>
+<div class="relative z-10 flex items-center justify-between font-label-code text-[10px] text-slate-400">
+<span>Driver: Suresh Kale (+91 98231-XXXXX)</span>
+<span>Speed: 38 km/h</span>
+</div>
+</div>
+<!-- Weight Scale Verification / Discrepancy Guard -->
+<div class="p-3 rounded bg-surface-container-low border border-outline-variant flex flex-col gap-2">
+<div class="flex items-center justify-between font-label-code text-label-code text-on-surface">
+<span class="font-semibold text-outline uppercase">WEIGHT BRIDGE TELEMETRY (800 UNITS)</span>
+<span class="text-tertiary font-bold">DELTA: 0.00%</span>
+</div>
+<div class="grid grid-cols-3 gap-2 font-label-code text-[11px] text-center">
+<div class="bg-surface-container-lowest p-1.5 rounded border border-outline-variant">
+<div class="text-outline text-[10px]">GROSS WEIGHT</div>
+<div class="font-bold text-on-surface mt-0.5">8,420 kg</div>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded border border-outline-variant">
+<div class="text-outline text-[10px]">TARE WEIGHT</div>
+<div class="font-bold text-on-surface mt-0.5">6,100 kg</div>
+</div>
+<div class="bg-surface-container-lowest p-1.5 rounded border border-outline-variant">
+<div class="text-outline text-[10px]">NET WT (800 PCS)</div>
+<div class="font-bold text-tertiary mt-0.5">2,320 kg (2.90 kg/pc)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 3: EXPEDITE DRAWER & VENDOR FURNACE TELEMETRY -->
+<div class="bg-surface-container-lowest border border-amber-300 rounded shadow-sm overflow-hidden" id="expedite-drawer">
+<div class="px-4 py-3 bg-amber-500/10 border-b border-amber-200 flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-amber-700">emergency_heat</span>
+<h2 class="font-headline-md text-headline-sm text-amber-900">Expedite Balance: 200 Units</h2>
+</div>
+<span class="font-label-code text-[11px] bg-amber-200 text-amber-900 px-2 py-0.5 rounded font-semibold">
+              CRITICAL ASSEMBLY BOTTLENECK
+            </span>
+</div>
+<div class="p-4 flex flex-col gap-3">
+<!-- Furnace Live Telemetry -->
+<div class="p-3 bg-surface-container-low rounded border border-outline-variant">
+<div class="flex items-center justify-between mb-2">
+<span class="font-label-code text-label-code text-outline uppercase">VACUUM FURNACE #3 TELEMETRY (LOT-E)</span>
+<span class="font-label-code text-[10px] text-tertiary font-medium">PLC DATA STREAM OK</span>
+</div>
+<div class="flex items-center justify-between">
+<div>
+<div class="font-metric-val text-headline-md text-on-surface">920.4 °C</div>
+<div class="font-label-code text-[10px] text-outline">Target: 920°C (±5°C)</div>
+</div>
+<div class="text-right">
+<div class="font-label-code text-body-md font-semibold text-amber-800">4h 15m remaining</div>
+<div class="font-label-code text-[10px] text-outline">Cycle: Carburizing Step 2/3</div>
+</div>
+</div>
+<!-- Progress Bar -->
+<div class="w-full bg-outline-variant h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-amber-600 h-full w-[65%]"></div>
+</div>
+</div>
+<!-- Action Triggers -->
+<div class="flex flex-col gap-2">
+<button class="w-full py-2 px-3 rounded bg-amber-600 hover:bg-amber-700 text-white font-headline-sm text-body-md flex items-center justify-center gap-2 transition-colors">
+<span class="material-symbols-outlined" style="font-size: 18px;">notifications_active</span>
+<span>Send Expedite Dispatch Notice to Vendor</span>
+</button>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-1.5 px-2 rounded border border-outline-variant bg-surface-container-lowest hover:bg-surface-container font-body-sm text-on-surface flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">call</span>
+<span>Contact Floor Incharge</span>
+</button>
+<button class="py-1.5 px-2 rounded border border-outline-variant bg-surface-container-lowest hover:bg-surface-container font-body-sm text-on-surface flex items-center justify-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">attach_file</span>
+<span>Digital Challan Slip</span>
+</button>
+</div>
+</div>
+<!-- Vendor QA Certificate preview snippet -->
+<div class="border-t border-outline-variant pt-3 flex items-center justify-between text-body-sm text-on-surface-variant">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-outline text-[18px]">verified_user</span>
+<span>Vendor QA Lead: Er. K. Varma</span>
+</div>
+<span class="font-label-code text-[11px] text-primary hover:underline cursor-pointer">View Sign-off Certificate →</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- AUDIT FOOTER METADATA STRIP -->
+<div class="mt-2 py-3 px-4 bg-surface-container-low rounded border border-outline-variant flex flex-wrap items-center justify-between text-body-sm text-outline">
+<div class="flex items-center gap-4">
+<span>Apex Auto Components ERP Server: <strong class="text-on-surface">PUN-SRV-04</strong></span>
+<span>•</span>
+<span>Subcontract Protocol: <strong class="text-on-surface">GST Annexure V / Jobwork Form ITC-04</strong></span>
+<span>•</span>
+<span>Sync State: <strong class="text-tertiary">Real-Time WebSocket Connected</strong></span>
+</div>
+<div class="font-label-code text-label-code">
+        CONFIDENTIAL - INTERNAL MANUFACTURING WORKFLOW
+      </div>
+</div>
+</main>
+</body></html>

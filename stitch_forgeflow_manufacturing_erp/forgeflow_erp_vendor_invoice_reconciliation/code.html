@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ForgeFlow ERP - Subcontractor 3-Way Reconciliation</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: Geist & JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-container": "#007d57",
+            "inverse-surface": "#2c3039",
+            "tertiary-fixed": "#85f8c4",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container": "#ebedfa",
+            "on-primary-fixed-variant": "#003ea8",
+            "on-secondary-container": "#006172",
+            "error-container": "#ffdad6",
+            "surface-tint": "#0053db",
+            "tertiary-fixed-dim": "#68dba9",
+            "background": "#f9f9ff",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dbe1ff",
+            "on-background": "#181c24",
+            "on-secondary-fixed": "#001f26",
+            "surface-container-high": "#e5e8f4",
+            "on-surface": "#181c24",
+            "surface-dim": "#d7dae5",
+            "on-error": "#ffffff",
+            "on-surface-variant": "#434655",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c3c6d7",
+            "secondary-fixed": "#acedff",
+            "surface-variant": "#dfe2ee",
+            "primary-container": "#2563eb",
+            "on-primary-fixed": "#00174b",
+            "secondary-fixed-dim": "#4cd7f6",
+            "secondary-container": "#57dffe",
+            "on-tertiary-container": "#bdffdc",
+            "on-secondary-fixed-variant": "#004e5c",
+            "on-tertiary-fixed-variant": "#005137",
+            "primary": "#004ac6",
+            "on-primary-container": "#eeefff",
+            "inverse-on-surface": "#eef0fc",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f1f3ff",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#b4c5ff",
+            "surface-container-highest": "#dfe2ee",
+            "outline": "#737686",
+            "surface-bright": "#f9f9ff",
+            "inverse-primary": "#b4c5ff",
+            "tertiary": "#006243",
+            "secondary": "#00687a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem",
+            "gutter-mobile": "0.75rem",
+            "space-2xs": "0.125rem",
+            "margin-mobile": "1rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Geist", "sans-serif"],
+            "headline-sm": ["Geist", "sans-serif"],
+            "label-code": ["JetBrains Mono", "monospace"],
+            "headline-md": ["Geist", "sans-serif"],
+            "headline-lg": ["Geist", "sans-serif"],
+            "body-md": ["Geist", "sans-serif"],
+            "label-caps": ["Geist", "sans-serif"],
+            "body-sm": ["Geist", "sans-serif"],
+            "display-lg-mobile": ["Geist", "sans-serif"],
+            "metric-val": ["JetBrains Mono", "monospace"],
+            "display-lg": ["Geist", "sans-serif"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-code": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "metric-val": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 4px;
+      height: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #c3c6d7;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface antialiased font-body-md text-body-md min-h-screen">
+<!-- ==================== FIXED LEFT SIDEBAR (SideNavBar Shared Component) ==================== -->
+<aside class="fixed top-0 bottom-0 left-0 w-60 z-40 bg-inverse-surface border-r border-outline flex flex-col h-full justify-between p-4">
+<!-- Brand & Workspace Header -->
+<div>
+<div class="flex items-center gap-3 px-2 py-1.5 mb-6">
+<div class="w-8 h-8 rounded bg-primary-container flex items-center justify-center text-on-primary font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+</div>
+<div class="overflow-hidden">
+<h1 class="font-headline-sm text-headline-sm text-inverse-on-surface tracking-tight leading-tight">ForgeFlow ERP</h1>
+<p class="font-label-code text-label-code text-outline-variant truncate">Apex Auto Components</p>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<div class="mb-4">
+<button class="w-full flex items-center justify-center gap-2 py-1.5 px-3 bg-surface-variant/10 text-inverse-on-surface border border-outline hover:bg-surface-variant/20 transition-colors font-body-sm text-body-sm rounded-lg">
+<span class="material-symbols-outlined text-[16px]">bolt</span>
+<span>Quick Dispatch</span>
+</button>
+</div>
+<!-- Primary Navigation Cluster -->
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Operations Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span>Dispatch &amp; Gate</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+<span>Subcontractor BOM</span>
+</a>
+<!-- ACTIVE TAB: Reconciliation Audit -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-variant/10 text-inverse-on-surface border-l-2 border-primary-container font-headline-sm text-headline-sm rounded-r-lg" href="#">
+<span class="material-symbols-outlined text-primary-fixed">fact_check</span>
+<span>Reconciliation Audit</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">report_problem</span>
+<span>Scrap &amp; Discrepancies</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined">tune</span>
+<span>Facility Settings</span>
+</a>
+</nav>
+</div>
+<!-- Secondary / Footer Navigation -->
+<div class="pt-4 border-t border-outline/30 space-y-1">
+<a class="flex items-center gap-3 px-3 py-1.5 text-outline-variant hover:text-inverse-on-surface transition-colors font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">dns</span>
+<span>System Diagnostics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-1.5 text-outline-variant hover:text-inverse-on-surface transition-colors font-body-sm text-body-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Audit Logs</span>
+</a>
+<div class="mt-4 pt-3 flex items-center gap-2.5 px-2">
+<div class="w-7 h-7 rounded-full bg-outline flex items-center justify-center text-inverse-on-surface font-label-code text-label-code font-bold">
+          PC
+        </div>
+<div class="overflow-hidden">
+<p class="font-body-sm text-body-sm text-inverse-on-surface leading-none truncate">R. Krishnamurthy</p>
+<p class="font-label-code text-[10px] text-outline-variant mt-0.5 truncate">Chief Plant Controller</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- ==================== FIXED TOP APP BAR (TopNavBar Shared Component) ==================== -->
+<header class="fixed top-0 left-60 right-0 h-14 z-30 bg-surface-container-lowest border-b border-surface-container-highest">
+<div class="flex justify-between items-center h-full px-6 max-w-[1760px]">
+<!-- Left: Breadcrumb hierarchy & Search Bar -->
+<div class="flex items-center gap-6 flex-1 max-w-2xl">
+<nav aria-label="Breadcrumb" class="flex items-center gap-1.5 font-label-code text-label-code text-on-surface-variant">
+<span class="hover:text-primary transition-colors cursor-pointer">ForgeFlow ERP</span>
+<span class="text-outline-variant">/</span>
+<span class="hover:text-primary transition-colors cursor-pointer">Finance &amp; Operations</span>
+<span class="text-outline-variant">/</span>
+<span class="text-on-surface font-semibold">Subcontractor Invoice Reconciliation</span>
+</nav>
+<!-- Search Input -->
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-outline-variant text-[16px]">search</span>
+<input class="w-full pl-8 pr-3 py-1 text-body-sm font-body-sm bg-surface-container-low border border-surface-container-highest rounded text-on-surface placeholder-outline focus:outline-none focus:border-primary-container focus:bg-surface-container-lowest" placeholder="Search invoice, PO, GRN..." type="text"/>
+</div>
+</div>
+<!-- Trailing Action Cluster -->
+<div class="flex items-center gap-3">
+<!-- Status Indicator Pill -->
+<div class="flex items-center gap-1.5 px-2.5 py-1 bg-surface-container border border-surface-container-highest rounded font-label-code text-label-code text-on-surface-variant">
+<span class="w-2 h-2 rounded-full bg-error animate-pulse"></span>
+<span>MATCH DISCREPANCY: 60 UNITS</span>
+</div>
+<button class="h-8 px-3 rounded bg-surface-container-lowest border border-surface-container-highest hover:bg-surface-container-low text-on-surface font-body-md text-body-md transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">file_download</span>
+<span>Export Ledger to Tally/SAP</span>
+</button>
+<button class="h-8 px-3 rounded bg-primary-container hover:bg-primary text-on-primary font-body-md text-body-md font-medium transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">assignment_turned_in</span>
+<span>Commit Debit Note</span>
+</button>
+<div class="h-4 w-px bg-surface-container-highest mx-1"></div>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" title="Notifications">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" title="Help &amp; Docs">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+</button>
+</div>
+</div>
+</header>
+<!-- ==================== MAIN OPERATIONAL WORKSPACE ==================== -->
+<main class="ml-60 pt-14 pb-12 min-h-screen">
+<div class="max-w-[1760px] mx-auto px-6 py-6 space-y-6">
+<!-- SECTION 1: Operational Header & Metadata Ledger Strip -->
+<section class="bg-surface-container-lowest border border-surface-container-highest rounded p-5">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 pb-4 border-b border-surface-container-highest">
+<div>
+<div class="flex items-center gap-3">
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Subcontractor 3-Way Reconciliation</h2>
+<span class="font-label-code text-label-code bg-surface-container px-2 py-0.5 rounded text-on-surface-variant font-semibold">#INV-8891</span>
+<span class="font-label-code text-label-code px-2 py-0.5 rounded bg-error-container text-on-error-container border border-error/20 font-semibold uppercase">Payment Hold</span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+              Apex Plant 2 Chassis Line • Heat Treatment &amp; Surface Hardening Module • AP Ledger Batch #AP-2025-0982
+            </p>
+</div>
+<!-- Key Commercial Badges -->
+<div class="flex flex-wrap items-center gap-3">
+<div class="bg-surface-container-low border border-surface-container-highest rounded px-3 py-1.5 text-right">
+<div class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Claimed Amount</div>
+<div class="font-metric-val text-metric-val text-on-surface font-semibold">₹3,84,000.00</div>
+</div>
+<div class="bg-surface-container-low border border-surface-container-highest rounded px-3 py-1.5 text-right">
+<div class="font-label-caps text-label-caps text-outline uppercase tracking-wider">Net Verified Payable</div>
+<div class="font-metric-val text-metric-val text-tertiary font-semibold">₹3,55,200.00</div>
+</div>
+<div class="bg-error-container/30 border border-error/20 rounded px-3 py-1.5 text-right">
+<div class="font-label-caps text-label-caps text-error uppercase tracking-wider">Debit Adjustment Req.</div>
+<div class="font-metric-val text-metric-val text-error font-semibold">-₹28,800.00</div>
+</div>
+</div>
+</div>
+<!-- Metadata Parameter Bar -->
+<div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 pt-4 font-body-sm text-body-sm">
+<div>
+<span class="font-label-caps text-label-caps text-outline block uppercase">Subcontractor Entity</span>
+<span class="font-headline-sm text-body-md text-on-surface font-medium truncate block">Precision Heat Processors Ltd.</span>
+<span class="font-label-code text-[11px] text-on-surface-variant">GSTIN: 27AAACP8912K1Z9</span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline block uppercase">Master PO Reference</span>
+<span class="font-label-code text-body-md text-primary font-semibold block">PO-2025-4180</span>
+<span class="text-on-surface-variant text-[11px]">Valid Thru: Dec 2025</span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline block uppercase">Agreed Jobwork Tariff</span>
+<span class="font-label-code text-body-md text-on-surface font-semibold block">₹480.00 / Unit</span>
+<span class="text-on-surface-variant text-[11px]">Anneal + Carbon Nitride</span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline block uppercase">Part Description &amp; SKU</span>
+<span class="font-body-md text-on-surface font-medium block truncate">Shaft Pinion 45-C8</span>
+<span class="font-label-code text-[11px] text-outline">P/N: APX-CHT-4482-B</span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline block uppercase">Inward Gate Verification</span>
+<span class="font-label-code text-body-md text-on-surface block font-medium">GATE-ENTRY #4419</span>
+<span class="text-on-surface-variant text-[11px]">Oct 28, 2025 • Dock 03</span>
+</div>
+<div>
+<span class="font-label-caps text-label-caps text-outline block uppercase">ERP 3-Way Match Confidence</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-code text-headline-sm text-error font-bold">92.5%</span>
+<span class="font-label-code text-[10px] text-error bg-error-container px-1 py-0.2 rounded font-semibold uppercase">Failed</span>
+</div>
+<span class="text-outline text-[11px]">Hold Threshold: &lt;99.5%</span>
+</div>
+</div>
+</section>
+<!-- SECTION 2: Two-Tier Reconciliation Variance Cards (Bento Style) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+<!-- Variance Card 1: Invoice vs Physical Inward Receipt -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-3 border-b border-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded bg-surface-container flex items-center justify-center text-on-surface-variant font-label-code text-label-code font-bold">01</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Physical Inward Variance</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Vendor Tax Invoice vs. Gate Weighment &amp; Inward GRN</p>
+</div>
+</div>
+<span class="font-label-code text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-error-container text-on-error-container border border-error/20">
+                Unverified Delivery
+              </span>
+</div>
+<!-- Breakdown Grid -->
+<div class="grid grid-cols-3 gap-3 my-4">
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest">
+<span class="font-label-caps text-label-caps text-outline block uppercase">Vendor Billed</span>
+<span class="font-metric-val text-metric-val text-on-surface font-semibold block mt-1">800 <span class="font-body-sm text-body-sm text-on-surface-variant">pcs</span></span>
+<span class="font-label-code text-label-code text-outline block mt-0.5">₹3,84,000.00</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest">
+<span class="font-label-caps text-label-caps text-outline block uppercase">Physically Received</span>
+<span class="font-metric-val text-metric-val text-on-surface font-semibold block mt-1">780 <span class="font-body-sm text-body-sm text-on-surface-variant">pcs</span></span>
+<span class="font-label-code text-label-code text-outline block mt-0.5">₹3,74,400.00</span>
+</div>
+<div class="p-3 bg-error-container/20 rounded border border-error/30">
+<span class="font-label-caps text-label-caps text-error block uppercase">Transit Shortage</span>
+<span class="font-metric-val text-metric-val text-error font-semibold block mt-1">+20 <span class="font-body-sm text-body-sm text-error">pcs</span></span>
+<span class="font-label-code text-label-code text-error block mt-0.5">+₹9,600.00 Excess Billed</span>
+</div>
+</div>
+<!-- Tolerance Difference Visual Bar -->
+<div class="space-y-1.5 pt-1">
+<div class="flex justify-between font-label-code text-[11px] text-on-surface-variant">
+<span>Inward Completion: 97.5%</span>
+<span class="text-error font-semibold">-2.5% Missing Physical Units</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-primary-container" style="width: 97.5%;"></div>
+<div class="h-full bg-error" style="width: 2.5%;"></div>
+</div>
+</div>
+</div>
+<!-- Card Footer Status & Action -->
+<div class="mt-4 pt-3 border-t border-surface-container-highest flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-1.5 text-on-error-container font-label-code text-[11px]">
+<span class="material-symbols-outlined text-[16px] text-error">warning</span>
+<span>DEBIT NOTE REQUIRED: Short shipment at dock receipt</span>
+</div>
+<button class="font-label-code text-label-code text-primary hover:underline flex items-center gap-1">
+<span>View GRN-9912 Log</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Variance Card 2: Invoice vs Quality Accepted Usable Quantity -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-3 border-b border-surface-container-highest">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded bg-surface-container flex items-center justify-center text-on-surface-variant font-label-code text-label-code font-bold">02</span>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Quality &amp; Usable Yield Variance</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Physical Inward vs. Metallurgical QA Clearance (QC-8842)</p>
+</div>
+</div>
+<span class="font-label-code text-[10px] uppercase font-semibold px-2 py-0.5 rounded bg-error-container text-on-error-container border border-error/20">
+                AP Payment Hold Recommended
+              </span>
+</div>
+<!-- Breakdown Grid -->
+<div class="grid grid-cols-3 gap-3 my-4">
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest">
+<span class="font-label-caps text-label-caps text-outline block uppercase">Physically Accepted</span>
+<span class="font-metric-val text-metric-val text-on-surface font-semibold block mt-1">780 <span class="font-body-sm text-body-sm text-on-surface-variant">pcs</span></span>
+<span class="font-label-code text-label-code text-outline block mt-0.5">At Unloading</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest">
+<span class="font-label-caps text-label-caps text-outline block uppercase">QC Passed &amp; Usable</span>
+<span class="font-metric-val text-metric-val text-tertiary font-semibold block mt-1">740 <span class="font-body-sm text-body-sm text-on-surface-variant">pcs</span></span>
+<span class="font-label-code text-label-code text-tertiary block mt-0.5">₹3,55,200.00 Authorized</span>
+</div>
+<div class="p-3 bg-error-container/20 rounded border border-error/30">
+<span class="font-label-caps text-label-caps text-error block uppercase">Total Commercial Risk</span>
+<span class="font-metric-val text-metric-val text-error font-semibold block mt-1">+60 <span class="font-body-sm text-body-sm text-error">pcs</span></span>
+<span class="font-label-code text-label-code text-error block mt-0.5">₹28,800.00 Exposure</span>
+</div>
+</div>
+<!-- Tolerance Difference Visual Bar -->
+<div class="space-y-1.5 pt-1">
+<div class="flex justify-between font-label-code text-[11px] text-on-surface-variant">
+<span>Net Usable Yield: 92.5%</span>
+<span class="text-error font-semibold">40 Pcs Scrap (NCR-089) + 20 Pcs Dock Short</span>
+</div>
+<div class="w-full h-2 bg-surface-container-highest rounded-full overflow-hidden flex">
+<div class="h-full bg-tertiary-container" style="width: 92.5%;"></div>
+<div class="h-full bg-surface-tint" style="width: 2.5%;" title="20 pcs Transit Loss"></div>
+<div class="h-full bg-error" style="width: 5.0%;" title="40 pcs QC Rejection"></div>
+</div>
+</div>
+</div>
+<!-- Card Footer Status & Action -->
+<div class="mt-4 pt-3 border-t border-surface-container-highest flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-1.5 text-on-surface-variant font-label-code text-[11px]">
+<span class="material-symbols-outlined text-[16px] text-error">cancel</span>
+<span>NCR-089: Hardness Case Depth &lt; 0.8mm (Overheated batch)</span>
+</div>
+<button class="font-label-code text-label-code text-primary hover:underline flex items-center gap-1">
+<span>Inspect NCR Report</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+<!-- SECTION 3: High-Density 3-Way Matching Reconciliation Table -->
+<section class="bg-surface-container-lowest border border-surface-container-highest rounded overflow-hidden">
+<!-- Table Toolbar -->
+<div class="px-5 py-3 border-b border-surface-container-highest flex flex-col md:flex-row md:items-center justify-between gap-3 bg-surface-bright">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary-container">account_balance_wallet</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">3-Way Transaction Matching Matrix</h3>
+<span class="font-label-code text-[10px] bg-surface-container px-2 py-0.5 rounded text-on-surface-variant uppercase">Line Item 1 of 1</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-code text-[11px] text-outline">Tolerance Threshold: ₹0.00 Variance Allowed</span>
+<div class="h-3 w-px bg-surface-container-highest"></div>
+<button class="font-label-code text-label-code text-primary hover:text-primary-container font-semibold flex items-center gap-1">
+<span class="material-symbols-outlined text-[15px]">refresh</span>
+<span>Re-run 3-Way Match Rule</span>
+</button>
+</div>
+</div>
+<!-- High Density Table Container -->
+<div class="overflow-x-auto custom-scroll">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-surface-container-highest text-on-surface-variant font-label-code text-label-code">
+<th class="py-2.5 px-4 font-semibold">Document Stage</th>
+<th class="py-2.5 px-4 font-semibold">Reference #</th>
+<th class="py-2.5 px-4 font-semibold">Doc Date</th>
+<th class="py-2.5 px-4 text-right font-semibold">Qty (Units)</th>
+<th class="py-2.5 px-4 text-right font-semibold">Rate (INR)</th>
+<th class="py-2.5 px-4 text-right font-semibold">Line Total (INR)</th>
+<th class="py-2.5 px-4 font-semibold">Verification Status</th>
+<th class="py-2.5 px-4 font-semibold">Variance &amp; Audit Notes</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container font-body-sm text-body-sm">
+<!-- Row 1: Subcontract PO -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">description</span>
+<span class="font-medium text-on-surface">Subcontract PO</span>
+</td>
+<td class="py-2.5 px-4 font-label-code text-primary font-medium">PO-2025-4180</td>
+<td class="py-2.5 px-4 font-label-code text-outline">15-Oct-2025</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface font-semibold">1,000</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface-variant">₹480.00</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface font-semibold">₹4,80,000.00</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-semibold">
+<span class="material-symbols-outlined text-[13px] text-primary">verified</span>
+                    Baseline Authorized
+                  </span>
+</td>
+<td class="py-2.5 px-4 font-body-sm text-on-surface-variant">
+                  Master blanket order for batch hardening
+                </td>
+</tr>
+<!-- Row 2: Subcontract Challan (Outward) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">local_shipping</span>
+<span class="font-medium text-on-surface">Subcontract Challan (Out)</span>
+</td>
+<td class="py-2.5 px-4 font-label-code text-on-surface font-medium">PHP/25/0814</td>
+<td class="py-2.5 px-4 font-label-code text-outline">18-Oct-2025</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface">1,000</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface-variant">--</td>
+<td class="py-2.5 px-4 text-right font-label-code text-outline">Material Sent</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-semibold">
+<span class="material-symbols-outlined text-[13px] text-outline">check_circle</span>
+                    Sent to Vendor
+                  </span>
+</td>
+<td class="py-2.5 px-4 font-body-sm text-on-surface-variant">
+                  Raw forged blanks dispatched for jobwork
+                </td>
+</tr>
+<!-- Row 3: Vendor Tax Invoice -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-primary-fixed/10">
+<td class="py-2.5 px-4 flex items-center gap-2 font-medium text-primary">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+<span>Vendor Tax Invoice</span>
+</td>
+<td class="py-2.5 px-4 font-label-code font-bold text-primary">INV-8891</td>
+<td class="py-2.5 px-4 font-label-code text-outline">27-Oct-2025</td>
+<td class="py-2.5 px-4 text-right font-label-code font-bold text-primary">800</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface-variant">₹480.00</td>
+<td class="py-2.5 px-4 text-right font-label-code font-bold text-primary">₹3,84,000.00</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] px-2 py-0.5 rounded bg-surface-container-high text-primary font-semibold">
+<span class="material-symbols-outlined text-[13px]">pending</span>
+                    Under Review (Claimed)
+                  </span>
+</td>
+<td class="py-2.5 px-4 font-body-sm text-primary font-medium">
+                  Partial invoice against lot 1 of 1,000 units
+                </td>
+</tr>
+<!-- Row 4: Goods Receipt Note (GRN) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">inventory_2</span>
+<span class="font-medium text-on-surface">Goods Receipt (GRN)</span>
+</td>
+<td class="py-2.5 px-4 font-label-code text-on-surface font-medium">GRN-9912</td>
+<td class="py-2.5 px-4 font-label-code text-outline">28-Oct-2025</td>
+<td class="py-2.5 px-4 text-right font-label-code text-error font-semibold">780</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface-variant">₹480.00</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface">₹3,74,400.00</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] px-2 py-0.5 rounded bg-error-container text-on-error-container font-semibold">
+<span class="material-symbols-outlined text-[13px] text-error">remove_circle</span>
+                    -20 Short (-₹9,600)
+                  </span>
+</td>
+<td class="py-2.5 px-4 font-body-sm text-error">
+                  Physical count discrepancy at Gate No. 3
+                </td>
+</tr>
+<!-- Row 5: Quality Inspection Cert (QC) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-2.5 px-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">rule</span>
+<span class="font-medium text-on-surface">Quality Inspection (QC)</span>
+</td>
+<td class="py-2.5 px-4 font-label-code text-on-surface font-medium">QC-8842</td>
+<td class="py-2.5 px-4 font-label-code text-outline">29-Oct-2025</td>
+<td class="py-2.5 px-4 text-right font-label-code text-error font-semibold">740</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface-variant">₹480.00</td>
+<td class="py-2.5 px-4 text-right font-label-code text-on-surface">₹3,55,200.00</td>
+<td class="py-2.5 px-4">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] px-2 py-0.5 rounded bg-error-container text-on-error-container font-semibold">
+<span class="material-symbols-outlined text-[13px] text-error">error</span>
+                    -40 Rejected (-₹19,200)
+                  </span>
+</td>
+<td class="py-2.5 px-4 font-body-sm text-error">
+                  NCR-089: Depth hardness test failure; Rework required
+                </td>
+</tr>
+<!-- Net Reconciliation Row -->
+<tr class="bg-surface-container-high/60 font-semibold border-t-2 border-surface-container-highest">
+<td class="py-3 px-4 flex items-center gap-2 text-tertiary">
+<span class="material-symbols-outlined text-[18px]">verified_user</span>
+<span class="font-headline-sm text-body-md">Net Approved Payable</span>
+</td>
+<td class="py-3 px-4 font-label-code text-on-surface-variant text-[11px]">3-WAY RECON AUTO-CALC</td>
+<td class="py-3 px-4 font-label-code text-outline">Today</td>
+<td class="py-3 px-4 text-right font-label-code text-tertiary text-body-md font-bold">740 Units</td>
+<td class="py-3 px-4 text-right font-label-code text-on-surface-variant">₹480.00</td>
+<td class="py-3 px-4 text-right font-label-code text-tertiary text-headline-sm font-bold">₹3,55,200.00</td>
+<td class="py-3 px-4">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-semibold">
+<span class="material-symbols-outlined text-[13px]">check</span>
+                    Usable Stock Only
+                  </span>
+</td>
+<td class="py-3 px-4 font-body-sm text-on-surface">
+                  Subject to execution of Debit Note DN-2025-4401
+                </td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- SECTION 4: Dispute & Action Resolution Panel (Split Column) -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Generated Debit Note Draft (7 cols) -->
+<div class="lg:col-span-7 bg-surface-container-lowest border border-surface-container-highest rounded p-5 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-3 border-b border-surface-container-highest">
+<div class="flex items-center gap-2.5">
+<div class="w-8 h-8 rounded bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Generated Debit Note Draft</h3>
+<p class="font-label-code text-label-code text-outline">REF: DN-2025-4401 • System Generated</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="font-label-code text-[11px] bg-surface-container px-2 py-0.5 rounded text-on-surface-variant">GST Regulated</span>
+<span class="font-label-code text-[11px] px-2 py-0.5 rounded bg-error-container text-on-error-container font-semibold uppercase">Pending Commit</span>
+</div>
+</div>
+<!-- Debit Note Summary Box -->
+<div class="mt-4 p-4 bg-surface-container-low rounded border border-surface-container-highest space-y-3 font-body-sm text-body-sm">
+<div class="flex justify-between items-start">
+<div>
+<span class="font-label-caps text-label-caps text-outline uppercase block">Debit Note Party</span>
+<span class="font-headline-sm text-body-md text-on-surface font-semibold">Precision Heat Processors Ltd.</span>
+<span class="font-label-code text-[11px] text-outline block">Plant Vendor Code: V-PHP-092</span>
+</div>
+<div class="text-right">
+<span class="font-label-caps text-label-caps text-outline uppercase block">Total Debit Value</span>
+<span class="font-metric-val text-headline-lg text-error font-bold block">₹28,800.00</span>
+<span class="font-label-code text-[11px] text-on-surface-variant">Against Invoice #INV-8891</span>
+</div>
+</div>
+<div class="h-px bg-surface-container-highest"></div>
+<!-- Breakdown Items -->
+<div class="space-y-2">
+<div class="flex items-center justify-between font-label-code text-label-code">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="text-on-surface font-medium">Item 1: Unverified Inward Shortfall (Transit Missing)</span>
+</div>
+<span class="text-on-surface font-semibold">20 Units × ₹480 = ₹9,600.00</span>
+</div>
+<p class="text-outline text-[11px] pl-3.5">
+                  Variance between Vendor Tax Invoice (800 units) and Security Gate Weighed Count (780 units).
+                </p>
+<div class="flex items-center justify-between font-label-code text-label-code pt-1">
+<div class="flex items-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+<span class="text-on-surface font-medium">Item 2: QC Metallurgical Rejection Hold (NCR-089)</span>
+</div>
+<span class="text-on-surface font-semibold">40 Units × ₹480 = ₹19,200.00</span>
+</div>
+<p class="text-outline text-[11px] pl-3.5">
+                  Subcontractor failed specification AST-092 hardness test. Material quarantined in Reject Bay 02.
+                </p>
+</div>
+<!-- Audit Stamp -->
+<div class="pt-2 flex items-center justify-between font-label-code text-[10px] text-outline border-t border-surface-container-highest">
+<span>Created by Auto-Recon Rule AP-R78 • Controller: R. Krishnamurthy</span>
+<span>Tax Recovery Code: CGST+SGST 18% Applicable</span>
+</div>
+</div>
+</div>
+<!-- Bottom Action within card -->
+<div class="mt-4 pt-3 border-t border-surface-container-highest flex items-center justify-between">
+<span class="text-on-surface-variant font-body-sm text-body-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+<span>Draft validated against SAP MM / FI Ledger sync rules.</span>
+</span>
+<button class="font-label-code text-label-code text-primary hover:underline flex items-center gap-1">
+<span>Preview Legal PDF</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Resolution Execution Console (5 cols) -->
+<div class="lg:col-span-5 bg-surface-container-lowest border border-surface-container-highest rounded p-5 flex flex-col justify-between">
+<div>
+<div class="pb-3 border-b border-surface-container-highest">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">AP Action &amp; Dispute Resolution</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Authorize adjusted settlement or escalate vendor dispute</p>
+</div>
+<!-- Primary Execution Buttons Stack -->
+<div class="space-y-3 mt-4">
+<!-- Primary Action 1 -->
+<button class="w-full py-2.5 px-4 bg-tertiary text-on-tertiary hover:bg-tertiary-container rounded font-body-md text-body-md font-semibold flex items-center justify-between transition-colors shadow-sm">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Approve Adjusted Payment</span>
+</div>
+<span class="font-label-code text-label-code bg-on-tertiary/20 px-2 py-0.5 rounded">₹3,55,200.00</span>
+</button>
+<!-- Secondary Action 2 -->
+<button class="w-full py-2.5 px-4 bg-primary-container text-on-primary hover:bg-primary rounded font-body-md text-body-md font-semibold flex items-center justify-between transition-colors shadow-sm">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">outgoing_mail</span>
+<span>Transmit Dispute Notice &amp; Debit Note</span>
+</div>
+<span class="font-label-code text-label-code bg-on-primary/20 px-2 py-0.5 rounded">DN-2025-4401</span>
+</button>
+<!-- Action 3 -->
+<button class="w-full py-2 px-4 bg-surface-container-lowest border border-surface-container-highest hover:bg-surface-container-low text-on-surface rounded font-body-md text-body-md font-medium flex items-center justify-between transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">handshake</span>
+<span>Request Vendor Credit Note</span>
+</div>
+<span class="font-label-code text-[11px] text-on-surface-variant">Self-Correction</span>
+</button>
+<!-- Action 4: Destructive / Hold -->
+<button class="w-full py-2 px-4 bg-error-container/40 border border-error/30 hover:bg-error-container text-error rounded font-body-md text-body-md font-medium flex items-center justify-between transition-colors">
+<div class="flex items-center gap-2.5">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+<span>Hold AP Voucher AP-2025-0982</span>
+</div>
+<span class="font-label-code text-[11px] text-error font-semibold uppercase">Freeze Payout</span>
+</button>
+</div>
+</div>
+<!-- Audit Notice at Bottom -->
+<div class="mt-4 pt-3 border-t border-surface-container-highest">
+<div class="flex items-start gap-2 bg-surface-container-low p-2.5 rounded font-body-sm text-body-sm text-on-surface-variant">
+<span class="material-symbols-outlined text-outline text-[16px] mt-0.5">lock_clock</span>
+<p class="text-[11px] leading-tight">
+                Any approved payment release requires secondary authorization by General Manager Finance as variance exceeds ₹10,000 threshold.
+              </p>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION 5: Subcontractor Historical Variance Context (Micro-Ledger) -->
+<section class="bg-surface-container-lowest border border-surface-container-highest rounded p-5">
+<div class="flex items-center justify-between mb-3">
+<div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Subcontractor Reconciliation History • Precision Heat Processors Ltd.</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Last 4 billing cycles compliance rate: 89.2% (Historical debit recovery total: ₹74,400)</p>
+</div>
+<button class="font-label-code text-label-code text-primary hover:underline flex items-center gap-1">
+<span>View Vendor Ledger Profile</span>
+<span class="material-symbols-outlined text-[14px]">open_in_new</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-3 font-body-sm text-body-sm">
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest flex items-center justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-outline block">INV-8742 (12-Oct-25)</span>
+<span class="font-label-code text-body-md font-semibold text-on-surface">₹4,20,000.00</span>
+</div>
+<span class="font-label-code text-[11px] px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed font-semibold">100% Match</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest flex items-center justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-outline block">INV-8610 (28-Sep-25)</span>
+<span class="font-label-code text-body-md font-semibold text-on-surface">₹2,88,000.00</span>
+</div>
+<span class="font-label-code text-[11px] px-2 py-0.5 rounded bg-error-container text-on-error-container font-semibold">DN: ₹14,400</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest flex items-center justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-outline block">INV-8501 (15-Sep-25)</span>
+<span class="font-label-code text-body-md font-semibold text-on-surface">₹5,10,000.00</span>
+</div>
+<span class="font-label-code text-[11px] px-2 py-0.5 rounded bg-error-container text-on-error-container font-semibold">DN: ₹31,200</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded border border-surface-container-highest flex items-center justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-outline block">Current: INV-8891</span>
+<span class="font-label-code text-body-md font-semibold text-error">₹3,84,000.00</span>
+</div>
+<span class="font-label-code text-[11px] px-2 py-0.5 rounded bg-error-container text-on-error-container font-bold">DN: ₹28,800</span>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

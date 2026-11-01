@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ForgeFlow ERP - Warehouse Receipt &amp; Inward Gate Pass</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "tertiary-container": "#007d57",
+            "inverse-surface": "#2c3039",
+            "tertiary-fixed": "#85f8c4",
+            "on-tertiary-fixed": "#002114",
+            "on-secondary": "#ffffff",
+            "surface-container": "#ebedfa",
+            "on-primary-fixed-variant": "#003ea8",
+            "on-secondary-container": "#006172",
+            "error-container": "#ffdad6",
+            "surface-tint": "#0053db",
+            "tertiary-fixed-dim": "#68dba9",
+            "background": "#f9f9ff",
+            "surface": "#f9f9ff",
+            "primary-fixed": "#dbe1ff",
+            "on-background": "#181c24",
+            "on-secondary-fixed": "#001f26",
+            "surface-container-high": "#e5e8f4",
+            "on-surface": "#181c24",
+            "surface-dim": "#d7dae5",
+            "on-error": "#ffffff",
+            "on-surface-variant": "#434655",
+            "surface-container-lowest": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "outline-variant": "#c3c6d7",
+            "secondary-fixed": "#acedff",
+            "surface-variant": "#dfe2ee",
+            "primary-container": "#2563eb",
+            "on-primary-fixed": "#00174b",
+            "secondary-fixed-dim": "#4cd7f6",
+            "secondary-container": "#57dffe",
+            "on-tertiary-container": "#bdffdc",
+            "on-secondary-fixed-variant": "#004e5c",
+            "on-tertiary-fixed-variant": "#005137",
+            "primary": "#004ac6",
+            "on-primary-container": "#eeefff",
+            "inverse-on-surface": "#eef0fc",
+            "error": "#ba1a1a",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#f1f3ff",
+            "on-error-container": "#93000a",
+            "primary-fixed-dim": "#b4c5ff",
+            "surface-container-highest": "#dfe2ee",
+            "outline": "#737686",
+            "surface-bright": "#f9f9ff",
+            "inverse-primary": "#b4c5ff",
+            "tertiary": "#006243",
+            "secondary": "#00687a"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "spacing": {
+            "space-md": "0.75rem",
+            "space-xl": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1.5rem",
+            "space-sm": "0.5rem",
+            "gutter-mobile": "0.75rem",
+            "space-2xs": "0.125rem",
+            "margin-mobile": "1rem",
+            "space-2xl": "2rem",
+            "gutter": "1rem",
+            "space-lg": "1rem"
+          },
+          "fontFamily": {
+            "body-lg": ["Geist"],
+            "headline-sm": ["Geist"],
+            "label-code": ["JetBrains Mono"],
+            "headline-md": ["Geist"],
+            "headline-lg": ["Geist"],
+            "body-md": ["Geist"],
+            "label-caps": ["Geist"],
+            "body-sm": ["Geist"],
+            "display-lg-mobile": ["Geist"],
+            "metric-val": ["JetBrains Mono"],
+            "display-lg": ["Geist"]
+          },
+          "fontSize": {
+            "body-lg": ["15px", { "lineHeight": "22px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+            "label-code": ["11px", { "lineHeight": "14px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+            "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "body-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "label-caps": ["11px", { "lineHeight": "14px", "letterSpacing": "0.05em", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }],
+            "display-lg-mobile": ["26px", { "lineHeight": "34px", "letterSpacing": "-0.02em", "fontWeight": "600" }],
+            "metric-val": ["22px", { "lineHeight": "28px", "letterSpacing": "-0.02em", "fontWeight": "500" }],
+            "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.025em", "fontWeight": "600" }]
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-background text-on-surface antialiased overflow-x-hidden">
+<!-- ==================== SIDEBAR ==================== -->
+<aside class="fixed top-0 bottom-0 left-0 w-60 z-40 bg-inverse-surface border-r border-outline dark:border-outline-variant flex flex-col justify-between p-4">
+<!-- Top Branding & Nav Links -->
+<div class="flex flex-col gap-4">
+<!-- Header Brand -->
+<div class="flex items-center gap-3 px-1 py-1">
+<div class="w-8 h-8 rounded-lg bg-primary-container text-white flex items-center justify-center font-headline-sm text-headline-sm">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-inverse-on-surface tracking-tight">ForgeFlow ERP</span>
+<span class="font-label-code text-label-code text-outline-variant">Apex Auto Components</span>
+</div>
+</div>
+<!-- Quick Dispatch Action Button -->
+<button class="w-full h-8 px-3 rounded-lg bg-surface-variant/15 text-inverse-on-surface hover:bg-surface-variant/25 transition-colors duration-150 flex items-center justify-between text-body-sm font-body-sm border border-outline/30">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary-fixed">bolt</span>
+<span>Quick Dispatch</span>
+</span>
+<span class="font-label-code text-label-code text-outline-variant">⌘D</span>
+</button>
+<!-- Main Navigation Menu -->
+<nav class="flex flex-col gap-1 mt-2">
+<!-- 1. Operations Overview -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined text-[18px]">dashboard</span>
+<span>Operations Overview</span>
+</a>
+<!-- 2. Dispatch & Gate (Active Destination for Gate/Dock Receiving) -->
+<a class="flex items-center gap-3 px-3 py-2 bg-surface-variant/10 text-inverse-on-surface border-l-2 border-primary-container font-headline-sm text-headline-sm rounded-r-lg" href="#">
+<span class="material-symbols-outlined text-[18px] text-primary-fixed" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span>Dispatch &amp; Gate</span>
+</a>
+<!-- 3. Subcontractor BOM -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined text-[18px]">precision_manufacturing</span>
+<span>Subcontractor BOM</span>
+</a>
+<!-- 4. Reconciliation Audit -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined text-[18px]">fact_check</span>
+<span>Reconciliation Audit</span>
+</a>
+<!-- 5. Scrap & Discrepancies -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined text-[18px]">report_problem</span>
+<span>Scrap &amp; Discrepancies</span>
+</a>
+<!-- 6. Facility Settings -->
+<a class="flex items-center gap-3 px-3 py-2 text-outline-variant hover:text-inverse-on-surface hover:bg-surface-variant/5 transition-colors font-body-md text-body-md rounded-lg" href="#">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Facility Settings</span>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer -->
+<div class="flex flex-col gap-1 border-t border-outline/30 pt-3">
+<a class="flex items-center gap-3 px-3 py-1.5 text-outline-variant hover:text-inverse-on-surface transition-colors font-body-sm text-body-sm rounded" href="#">
+<span class="material-symbols-outlined text-[16px]">dns</span>
+<span>System Diagnostics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-1.5 text-outline-variant hover:text-inverse-on-surface transition-colors font-body-sm text-body-sm rounded" href="#">
+<span class="material-symbols-outlined text-[16px]">history</span>
+<span>Audit Logs</span>
+</a>
+<!-- Facility Active Indicator -->
+<div class="mt-2 px-3 py-2 bg-surface-variant/10 rounded flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-code text-label-code text-inverse-on-surface">PUN-PLANT-02</span>
+</div>
+<span class="font-label-code text-label-code text-outline-variant">LIVE 99.8%</span>
+</div>
+</div>
+</aside>
+<!-- ==================== TOP NAVIGATION BAR ==================== -->
+<header class="fixed top-0 left-60 right-0 h-14 z-30 bg-surface-container-lowest border-b border-surface-container-highest">
+<div class="flex justify-between items-center h-full px-6 max-w-[1760px]">
+<!-- Left: Breadcrumb & Search -->
+<div class="flex items-center gap-4">
+<!-- Breadcrumb Hierarchy -->
+<nav class="flex items-center gap-1.5 text-on-surface-variant font-body-sm text-body-sm">
+<span class="font-label-code text-label-code uppercase tracking-wider text-on-surface-variant">ForgeFlow ERP</span>
+<span class="text-outline-variant">/</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Operations</span>
+<span class="text-outline-variant">/</span>
+<span class="font-headline-sm text-headline-sm text-primary">Warehouse Receiving Dock</span>
+</nav>
+<!-- Search Bar Input -->
+<div class="relative ml-4">
+<span class="material-symbols-outlined absolute left-2.5 top-1/2 -translate-y-1/2 text-[16px] text-outline">search</span>
+<input class="h-8 pl-8 pr-3 w-64 bg-surface-container-low border border-surface-container-high rounded text-body-sm font-body-sm text-on-surface placeholder:text-outline focus:outline-none focus:border-primary-container focus:bg-surface-container-lowest transition-all" placeholder="Search Challan #, PO, Pallet ID..." type="text"/>
+<kbd class="absolute right-2 top-1/2 -translate-y-1/2 font-label-code text-[10px] text-outline bg-surface-container px-1 py-0.5 rounded">⌘K</kbd>
+</div>
+</div>
+<!-- Right: Action Buttons, System Notifications & User Profile -->
+<div class="flex items-center gap-3">
+<!-- Secondary Action: Print Inward GRN -->
+<button class="h-8 px-3 rounded bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-on-surface font-body-md text-body-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">print</span>
+<span>Print Inward GRN</span>
+</button>
+<!-- Primary Action: + New Gate Entry -->
+<button class="h-8 px-3 rounded bg-primary-container hover:bg-primary text-white font-body-md text-body-md flex items-center gap-1.5 transition-colors">
+<span class="material-symbols-outlined text-[16px]">add_circle</span>
+<span>+ New Gate Entry</span>
+</button>
+<!-- Vertical Divider -->
+<div class="h-5 w-px bg-surface-container-highest mx-1"></div>
+<!-- Trailing Icon Actions -->
+<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface relative">
+<span class="material-symbols-outlined text-[18px]">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-error"></span>
+</button>
+<button class="w-8 h-8 rounded flex items-center justify-center text-on-surface-variant hover:bg-surface-container hover:text-on-surface">
+<span class="material-symbols-outlined text-[18px]">help_outline</span>
+</button>
+<!-- User Profile Avatar & Role -->
+<div class="flex items-center gap-2 pl-2">
+<div class="w-7 h-7 rounded-full bg-primary-container text-white flex items-center justify-center text-xs font-headline-sm">
+            CP
+          </div>
+<div class="hidden xl:flex flex-col text-left">
+<span class="font-headline-sm text-body-sm text-on-surface leading-none">R. Kulkarni</span>
+<span class="font-label-code text-[10px] text-outline-variant leading-none mt-0.5">Dock Controller (Gate 2)</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- ==================== MAIN OPERATIONAL CANVAS ==================== -->
+<main class="ml-60 pt-14 min-h-screen bg-background p-6">
+<div class="max-w-[1760px] mx-auto flex flex-col gap-5">
+<!-- ==================== CRITICAL GATE DISCREPANCY ALERT BANNER ==================== -->
+<section class="bg-error-container/30 border border-error/40 rounded p-4 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+<div class="flex items-start gap-3">
+<div class="w-8 h-8 rounded bg-error text-white flex items-center justify-center shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-caps text-label-caps text-on-error-container tracking-wider uppercase">CRITICAL GATE VARIANCE DETECTED</span>
+<span class="h-5 px-1.5 py-0.5 rounded text-[10px] font-label-code uppercase tracking-wider bg-error text-white font-medium">SHORT-RECEIPT ACTIVE</span>
+<span class="font-label-code text-label-code text-on-surface-variant">Gate Slip: #GS-2025-8819</span>
+</div>
+<p class="font-body-md text-body-md text-on-error-container mt-1">
+              Vendor Delivery Challan <strong class="font-label-code">PHP/25/0814</strong> declares <strong>800 units</strong> across 4 pallets. Physical count at Gate 2 verified <strong class="font-headline-sm">780 units</strong>. Discrepancy of <strong class="text-error font-label-code">-20 units</strong> (-31.0 kg tare net weight deficit). Short-receipt protocol active.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-2 shrink-0 self-end md:self-center">
+<button class="h-8 px-3 rounded bg-surface-container-lowest border border-error/50 hover:bg-error-container/50 text-error font-body-md text-body-md transition-colors flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">gavel</span>
+<span>Notify Plant QA</span>
+</button>
+<button class="h-8 px-3 rounded bg-error text-white hover:bg-on-error-container font-body-md text-body-md transition-colors flex items-center gap-1.5 shadow-sm">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+<span>Issue Short-Receipt Slip</span>
+</button>
+</div>
+</section>
+<!-- ==================== PAGE TITLE & RECEIPT CONTEXT STRIP ==================== -->
+<section class="flex flex-col md:flex-row md:items-center justify-between pb-3 border-b border-surface-container-highest gap-3">
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+              Warehouse Receiving &amp; Gate Pass Inward
+            </h1>
+<span class="px-2 py-0.5 rounded text-xs font-label-code bg-surface-container-high text-on-surface border border-outline-variant">
+              Dock Bay 4B
+            </span>
+</div>
+<div class="flex items-center gap-3 mt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span>Active Goods Receipt Note: <strong class="font-label-code text-on-surface">GRN-2025-09912</strong></span>
+<span class="text-outline-variant">|</span>
+<span>Purchase Order: <strong class="font-label-code text-primary">PO-2025-4180</strong></span>
+<span class="text-outline-variant">|</span>
+<span>Vendor: <strong class="text-on-surface">Precision Forge-Tech Components Pvt Ltd</strong></span>
+<span class="text-outline-variant">|</span>
+<span>Challan Date: <span class="font-label-code">24-Oct-2025 08:30 IST</span></span>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<!-- Live Gate Sensor Sync Status -->
+<div class="px-3 py-1 bg-surface-container-lowest border border-outline-variant rounded flex items-center gap-2">
+<span class="relative flex h-2 w-2">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-tertiary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2 w-2 bg-tertiary"></span>
+</span>
+<span class="font-label-code text-[11px] text-on-surface-variant">Weighbridge Scale 2: ONLINE (±0.05 kg calibrated)</span>
+</div>
+</div>
+</section>
+<!-- ==================== KPI SUMMARY STRIP (5 DATA CARDS) ==================== -->
+<section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+<!-- Card 1: Expected from Vendor -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Expected from Vendor</span>
+<span class="material-symbols-outlined text-[16px] text-outline">inventory_2</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<span class="font-metric-val text-metric-val text-on-surface">800 <span class="text-body-sm font-body-sm text-on-surface-variant font-normal">units</span></span>
+<span class="font-label-code text-label-code text-on-surface-variant bg-surface-container px-1.5 py-0.5 rounded">4 Pallets</span>
+</div>
+<div class="mt-2 text-[11px] text-outline-variant font-body-sm">
+            As per DC #PHP/25/0814
+          </div>
+</div>
+<!-- Card 2: Physically Inwarded -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Physically Inwarded</span>
+<span class="material-symbols-outlined text-[16px] text-tertiary">fact_check</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<span class="font-metric-val text-metric-val text-tertiary">780 <span class="text-body-sm font-body-sm text-on-surface-variant font-normal">units</span></span>
+<span class="font-label-code text-label-code text-tertiary-container bg-tertiary-fixed/30 border border-tertiary-fixed px-1.5 py-0.5 rounded font-medium">97.5% TALLY</span>
+</div>
+<div class="mt-2 text-[11px] text-outline-variant font-body-sm">
+            Scanned at Inward Dock 4B
+          </div>
+</div>
+<!-- Card 3: Missing In-Transit -->
+<div class="bg-error-container/20 border border-error/30 rounded p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-error">Missing In-Transit</span>
+<span class="material-symbols-outlined text-[16px] text-error" style="font-variation-settings: 'FILL' 1;">error</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<span class="font-metric-val text-metric-val text-error">-20 <span class="text-body-sm font-body-sm text-error/80 font-normal">units</span></span>
+<span class="font-label-code text-label-code text-error bg-error-container px-1.5 py-0.5 rounded font-bold">DEFICIT</span>
+</div>
+<div class="mt-2 text-[11px] text-on-error-container font-body-sm truncate">
+            Pallet 13: 180 act vs 200 decl
+          </div>
+</div>
+<!-- Card 4: Weighbridge Gross -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Weighbridge Gross</span>
+<span class="material-symbols-outlined text-[16px] text-outline">scale</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<span class="font-metric-val text-metric-val text-on-surface">1,209 <span class="text-body-sm font-body-sm text-on-surface-variant font-normal">kg</span></span>
+<span class="font-label-code text-label-code text-error bg-error-container/40 px-1.5 py-0.5 rounded font-medium">-31 kg Δ</span>
+</div>
+<div class="mt-2 text-[11px] text-outline-variant font-body-sm">
+            Declared: 1,240 kg on slip #WB-4091
+          </div>
+</div>
+<!-- Card 5: Gate Entry Status -->
+<div class="bg-surface-container-lowest border border-surface-container-highest rounded p-3.5 flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">Gate Entry Status</span>
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">shield_with_heart</span>
+</div>
+<div class="flex items-baseline justify-between mt-2">
+<span class="font-headline-sm text-headline-sm text-error uppercase tracking-tight">FLAGGED</span>
+<span class="font-label-code text-[11px] text-on-surface-variant bg-surface-container-high px-1.5 py-0.5 rounded">HOLD PENDING</span>
+</div>
+<div class="mt-2 text-[11px] text-outline-variant font-body-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[13px] text-error">flag</span>
+<span>Flagged with Variance</span>
+</div>
+</div>
+</section>
+<!-- ==================== MAIN WORKSPACE: PALLET LEDGER & RECEIVING ACTION PANEL ==================== -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+<!-- ==================== LEFT / MAIN COLUMN: PALLET BREAKDOWN TABLE (8 COLS) ==================== -->
+<section class="lg:col-span-8 bg-surface-container-lowest border border-surface-container-highest rounded flex flex-col">
+<!-- Table Toolbar -->
+<div class="p-3.5 border-b border-surface-container-highest flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary-container text-[20px]">pallet</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">
+                Receiving Dock Inspection &amp; Pallet Breakdown
+              </h2>
+<span class="font-label-code text-label-code text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
+                Lot Batch: BT-2025-CRK-44
+              </span>
+</div>
+<!-- Table Actions: Barcode Scanner / Manual Weigh -->
+<div class="flex items-center gap-2">
+<div class="flex items-center gap-1.5 bg-surface-container-low border border-outline-variant/60 px-2 py-1 rounded">
+<span class="material-symbols-outlined text-[16px] text-tertiary animate-pulse">barcode_reader</span>
+<span class="font-label-code text-[11px] text-on-surface">Auto-Scanner: Gate Dock 4B-A</span>
+</div>
+<button class="h-7 px-2 text-xs font-body-md bg-surface-container-lowest border border-outline-variant hover:bg-surface-container rounded text-on-surface flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">refresh</span>
+<span>Re-weigh All</span>
+</button>
+</div>
+</div>
+<!-- Pallet Breakdown Ledger Grid -->
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="h-8 bg-surface border-b border-outline-variant/40 font-label-code text-[11px] text-on-surface-variant tracking-wider uppercase">
+<th class="py-1 px-3">Pallet #</th>
+<th class="py-1 px-3">Crate Barcode</th>
+<th class="py-1 px-3 text-right">Declared</th>
+<th class="py-1 px-3 text-right">Scanned</th>
+<th class="py-1 px-3 text-right">Scale Net (kg)</th>
+<th class="py-1 px-3">Tare Delta</th>
+<th class="py-1 px-3">Seal Integrity</th>
+<th class="py-1 px-3">Inspector</th>
+<th class="py-1 px-3">Status</th>
+<th class="py-1 px-3 text-center">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-highest font-body-md text-body-md">
+<!-- ROW 1: Pallet 11 - VERIFIED OK -->
+<tr class="h-9 hover:bg-surface-container-low transition-colors">
+<td class="py-1 px-3 font-label-code text-on-surface font-semibold">
+                    Pallet 11
+                  </td>
+<td class="py-1 px-3 font-label-code text-[11px] text-primary">
+<span class="hover:underline cursor-pointer">PLT-8819-01</span>
+</td>
+<td class="py-1 px-3 text-right font-label-code text-on-surface-variant">
+                    200
+                  </td>
+<td class="py-1 px-3 text-right font-label-code font-semibold text-tertiary">
+                    200
+                  </td>
+<td class="py-1 px-3 text-right font-label-code text-on-surface">
+                    310.2 kg
+                  </td>
+<td class="py-1 px-3">
+<span class="font-label-code text-[11px] text-tertiary font-medium">+0.2 kg</span>
+</td>
+<td class="py-1 px-3">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] text-tertiary">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+                      Intact (#SL-901)
+                    </span>
+</td>
+<td class="py-1 px-3 text-body-sm text-on-surface-variant">
+                    R. Kulkarni
+                  </td>
+<td class="py-1 px-3">
+<span class="h-5 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-label-code font-medium bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]">
+                      Verified OK
+                    </span>
+</td>
+<td class="py-1 px-3 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="View Inspection Log">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- ROW 2: Pallet 12 - VERIFIED OK -->
+<tr class="h-9 hover:bg-surface-container-low transition-colors">
+<td class="py-1 px-3 font-label-code text-on-surface font-semibold">
+                    Pallet 12
+                  </td>
+<td class="py-1 px-3 font-label-code text-[11px] text-primary">
+<span class="hover:underline cursor-pointer">PLT-8819-02</span>
+</td>
+<td class="py-1 px-3 text-right font-label-code text-on-surface-variant">
+                    200
+                  </td>
+<td class="py-1 px-3 text-right font-label-code font-semibold text-tertiary">
+                    200
+                  </td>
+<td class="py-1 px-3 text-right font-label-code text-on-surface">
+                    309.8 kg
+                  </td>
+<td class="py-1 px-3">
+<span class="font-label-code text-[11px] text-on-surface-variant font-medium">-0.2 kg</span>
+</td>
+<td class="py-1 px-3">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] text-tertiary">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+                      Intact (#SL-902)
+                    </span>
+</td>
+<td class="py-1 px-3 text-body-sm text-on-surface-variant">
+                    R. Kulkarni
+                  </td>
+<td class="py-1 px-3">
+<span class="h-5 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-label-code font-medium bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]">
+                      Verified OK
+                    </span>
+</td>
+<td class="py-1 px-3 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="View Inspection Log">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+</td>
+</tr>
+<!-- ROW 3: Pallet 13 - CRITICAL DISCREPANCY -->
+<tr class="h-10 bg-error-container/20 hover:bg-error-container/30 transition-colors border-l-4 border-l-error">
+<td class="py-1 px-3 font-label-code text-error font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">error</span>
+                    Pallet 13
+                  </td>
+<td class="py-1 px-3 font-label-code text-[11px] text-error font-semibold">
+<span class="underline cursor-pointer">PLT-8819-03</span>
+</td>
+<td class="py-1 px-3 text-right font-label-code text-on-surface-variant line-through">
+                    200
+                  </td>
+<td class="py-1 px-3 text-right font-label-code font-bold text-error">
+                    180
+                  </td>
+<td class="py-1 px-3 text-right font-label-code text-error font-semibold">
+                    279.0 kg
+                  </td>
+<td class="py-1 px-3">
+<span class="font-label-code text-[11px] text-error font-bold">-31.0 kg (Deficit)</span>
+</td>
+<td class="py-1 px-3">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] text-error font-semibold">
+<span class="material-symbols-outlined text-[14px]">lock_open</span>
+                      Broken / Tampered
+                    </span>
+</td>
+<td class="py-1 px-3 text-body-sm text-error font-medium">
+                    S. Jadhav / RK
+                  </td>
+<td class="py-1 px-3">
+<span class="h-5 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-label-code font-bold bg-[#FEF2F2] text-[#991B1B] border border-[#FECACA]">
+                      DISCREPANCY (-20)
+                    </span>
+</td>
+<td class="py-1 px-3 text-center">
+<button class="px-2 py-0.5 text-xs font-label-code bg-error text-white hover:bg-on-error-container rounded shadow-xs" title="Flag Pallet Details">
+                      Isolate
+                    </button>
+</td>
+</tr>
+<!-- ROW 4: Pallet 14 - VERIFIED OK -->
+<tr class="h-9 hover:bg-surface-container-low transition-colors">
+<td class="py-1 px-3 font-label-code text-on-surface font-semibold">
+                    Pallet 14
+                  </td>
+<td class="py-1 px-3 font-label-code text-[11px] text-primary">
+<span class="hover:underline cursor-pointer">PLT-8819-04</span>
+</td>
+<td class="py-1 px-3 text-right font-label-code text-on-surface-variant">
+                    200
+                  </td>
+<td class="py-1 px-3 text-right font-label-code font-semibold text-tertiary">
+                    200
+                  </td>
+<td class="py-1 px-3 text-right font-label-code text-on-surface">
+                    310.0 kg
+                  </td>
+<td class="py-1 px-3">
+<span class="font-label-code text-[11px] text-tertiary font-medium">0.0 kg</span>
+</td>
+<td class="py-1 px-3">
+<span class="inline-flex items-center gap-1 font-label-code text-[11px] text-tertiary">
+<span class="material-symbols-outlined text-[14px]">lock</span>
+                      Intact (#SL-904)
+                    </span>
+</td>
+<td class="py-1 px-3 text-body-sm text-on-surface-variant">
+                    R. Kulkarni
+                  </td>
+<td class="py-1 px-3">
+<span class="h-5 inline-flex items-center px-2 py-0.5 rounded text-[11px] font-label-code font-medium bg-[#ECFDF5] text-[#065F46] border border-[#A7F3D0]">
+                      Verified OK
+                    </span>
+</td>
+<td class="py-1 px-3 text-center">
+<button class="text-on-surface-variant hover:text-primary transition-colors p-1" title="View Inspection Log">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+</button>
+</td>
+</tr>
+</tbody>
+<!-- Footer Totals Row -->
+<tfoot>
+<tr class="h-9 bg-surface-container-low border-t border-outline-variant font-label-code text-[12px] font-semibold text-on-surface">
+<td class="py-1 px-3" colspan="2">TOTAL RECEIPT RECONCILIATION</td>
+<td class="py-1 px-3 text-right text-on-surface-variant">800 Declared</td>
+<td class="py-1 px-3 text-right text-error font-bold">780 Physical</td>
+<td class="py-1 px-3 text-right text-on-surface">1,209.0 kg</td>
+<td class="py-1 px-3 text-error font-bold">-31.0 kg</td>
+<td class="py-1 px-3 text-on-error-container text-[11px]">1 Broken Seal</td>
+<td class="py-1 px-3" colspan="2">
+<span class="font-label-code text-[11px] text-error font-medium">Shortage Rate: 2.50%</span>
+</td>
+<td></td>
+</tr>
+</tfoot>
+</table>
+</div>
+<!-- Visual Tolerance & Weight Variance Breakdown Sub-Panel -->
+<div class="p-4 bg-surface border-t border-surface-container-highest flex flex-col md:flex-row items-center justify-between gap-4">
+<div class="flex items-center gap-4 w-full md:w-auto">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant shrink-0">BOM Weight Variance:</span>
+<div class="flex items-center gap-2 w-full md:w-64">
+<span class="font-label-code text-[11px] text-error font-medium">-31kg</span>
+<!-- Custom Tolerance Diff Bar (48px x 4px equivalent scaled representation) -->
+<div class="w-full bg-surface-variant h-2 rounded overflow-hidden flex">
+<div class="bg-error h-full" style="width: 25%;"></div>
+<div class="bg-tertiary h-full" style="width: 75%;"></div>
+</div>
+<span class="font-label-code text-[11px] text-tertiary font-medium">Spec OK</span>
+</div>
+</div>
+<!-- Pallet Security Chain Tag -->
+<div class="flex items-center gap-3 text-xs text-on-surface-variant font-body-sm">
+<span class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[15px] text-tertiary">verified_user</span>
+                CCTV Dock Cam #04 Footage Saved (08:14:22 - 08:31:05)
+              </span>
+<span class="text-outline-variant">|</span>
+<a class="text-primary hover:underline font-label-code text-[11px]" href="#">Download Footage Clip (MP4)</a>
+</div>
+</div>
+</section>
+<!-- ==================== RIGHT COLUMN: PHYSICAL RECEIVING ACTION PANEL & FORM (4 COLS) ==================== -->
+<aside class="lg:col-span-4 bg-surface-container-lowest border border-surface-container-highest rounded flex flex-col">
+<!-- Panel Header -->
+<div class="p-3.5 border-b border-surface-container-highest flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">assignment_turned_in</span>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">
+                Inward Gate Pass &amp; Execution
+              </h2>
+</div>
+<span class="font-label-code text-label-code text-on-surface-variant bg-surface-container px-2 py-0.5 rounded">
+              Form IN-104
+            </span>
+</div>
+<!-- Partial Receipt Inward Form -->
+<form class="p-4 flex flex-col gap-3.5" onsubmit="event.preventDefault();">
+<!-- Field 1: Transporter Name -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant flex items-center justify-between">
+<span>Transporter</span>
+<span class="font-label-code text-[10px] text-outline">Verified Fleet</span>
+</label>
+<input class="h-8 px-2.5 bg-surface-container-low border border-outline-variant rounded font-body-md text-body-md text-on-surface focus:outline-none" readonly="" type="text" value="Shree Logistics (MH-12-RN-9941)"/>
+</div>
+<!-- Field 2: Driver Name with Disputed Count Signature Note -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant flex items-center justify-between">
+<span>Driver Name &amp; Verification</span>
+<span class="font-label-code text-[10px] text-error font-semibold">Signature Disputed</span>
+</label>
+<div class="relative">
+<input class="h-8 pl-2.5 pr-8 w-full bg-surface-container-lowest border border-error/70 rounded font-body-md text-body-md text-on-surface focus:ring-1 focus:ring-error focus:border-error" type="text" value="S. Jadhav (Lic: MH12-201800921)"/>
+<span class="material-symbols-outlined absolute right-2 top-1/2 -translate-y-1/2 text-[16px] text-error">draw</span>
+</div>
+<p class="font-body-sm text-[11px] text-error mt-0.5">
+                Driver refused to sign for missing 20 pcs; security guard countersigned incident slip.
+              </p>
+</div>
+<!-- Grid 2-col: Gate Pass # & Unloading Bay -->
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Gate Pass #</label>
+<input class="h-8 px-2.5 bg-surface-container-low border border-outline-variant rounded font-label-code text-body-md text-on-surface" readonly="" type="text" value="GP-9912"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Unloading Bay</label>
+<select class="h-8 px-2 bg-surface-container-lowest border border-outline-variant rounded font-body-md text-body-md text-on-surface focus:border-primary-container">
+<option selected="">Dock 4B (Heavy Pallet)</option>
+<option>Dock 4A (Light Duty)</option>
+<option>Dock 2 (Direct Quarantine)</option>
+</select>
+</div>
+</div>
+<!-- Grid 2-col: Weighbridge Slip # & Net Tally Weight -->
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Weighbridge Slip</label>
+<input class="h-8 px-2.5 bg-surface-container-low border border-outline-variant rounded font-label-code text-body-md text-on-surface" readonly="" type="text" value="#WB-4091"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Net Inward Tare</label>
+<input class="h-8 px-2.5 bg-surface-container-low border border-outline-variant rounded font-label-code text-body-md text-on-surface" readonly="" type="text" value="1,209 kg Net"/>
+</div>
+</div>
+<!-- Mandatory Compliance Protocol Checkbox -->
+<div class="p-3 bg-surface-container-low/70 border border-outline-variant rounded flex items-start gap-2.5 mt-1">
+<input checked="" class="mt-0.5 rounded border-outline text-primary-container focus:ring-primary-container h-4 w-4" id="blind-protocol" type="checkbox"/>
+<label class="text-body-sm font-body-sm text-on-surface leading-tight cursor-pointer" for="blind-protocol">
+<strong>Mandatory Blind / Dual Verification Protocol:</strong> Do not auto-fill vendor declared quantity. Requires independent tally confirmation before warehouse rack staging.
+              </label>
+</div>
+<!-- Supervisor Operational Remarks / Debit Note Trigger -->
+<div class="flex flex-col gap-1">
+<label class="font-label-caps text-label-caps uppercase text-on-surface-variant">Gate Controller Notes</label>
+<textarea class="p-2 bg-surface-container-lowest border border-outline-variant rounded font-body-sm text-body-sm text-on-surface focus:border-primary-container resize-none" placeholder="Discrepancy statement..." rows="2">Pallet #13 plastic strap was severed upon dock arrival. 1 layer (20 units) missing. Initiated vendor debit note memo draft.</textarea>
+</div>
+<!-- ACTION BUTTONS CLUSTER -->
+<div class="flex flex-col gap-2 pt-2 border-t border-surface-container-highest">
+<!-- Primary Decision Action: Issue Short-Receipt Gate Pass -->
+<button class="w-full h-9 px-3 rounded bg-primary-container hover:bg-primary text-white font-headline-sm text-body-md flex items-center justify-center gap-2 transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+<span>Issue Short-Receipt Gate Pass (780 units)</span>
+</button>
+<!-- Secondary Risk Action: Hold Shipment for Security Review -->
+<button class="w-full h-8 px-3 rounded bg-surface-container-lowest border border-error/60 hover:bg-error-container/20 text-error font-body-md text-body-md flex items-center justify-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px]">shield</span>
+<span>Hold Shipment for Security Review</span>
+</button>
+<!-- Tertiary Action: Generate Gate Discrepancy Memo (Form G-12) -->
+<button class="w-full h-8 px-3 rounded bg-surface-container-lowest border border-outline-variant hover:bg-surface-container text-on-surface font-body-md text-body-md flex items-center justify-center gap-2 transition-colors" type="button">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">description</span>
+<span>Generate Discrepancy Memo (Form G-12)</span>
+</button>
+</div>
+</form>
+<!-- Audit Log Trail Snapshot inside Action Panel -->
+<div class="p-3 bg-surface-container-low border-t border-surface-container-highest flex items-center justify-between text-[11px] font-label-code text-on-surface-variant">
+<span>Inspector: RK (ID: #4092)</span>
+<span>Recorded: 08:34:11 IST</span>
+</div>
+</aside>
+</div>
+<!-- ==================== DISPATCH LOT STEPPER (SHARED DESIGN SYSTEM COMPONENT) ==================== -->
+<section class="bg-surface-container-lowest border border-surface-container-highest rounded p-4">
+<div class="flex items-center justify-between mb-3">
+<span class="font-label-caps text-label-caps uppercase text-on-surface-variant">
+            Inward Supply Chain Pipeline &amp; Chain-of-Custody
+          </span>
+<span class="font-label-code text-[11px] text-on-surface-variant">
+            Tracking ID: IN-2025-PUN-09912
+          </span>
+</div>
+<!-- Segmented Pipeline Stepper with 1px Connector Rules -->
+<div class="grid grid-cols-1 sm:grid-cols-4 gap-2 relative">
+<!-- Step 1: Vendor Dispatch -->
+<div class="flex items-center gap-3 p-2 rounded bg-surface-container-low/50 border border-surface-container-highest">
+<div class="w-7 h-7 rounded-full bg-tertiary-container text-white flex items-center justify-center font-label-code text-xs">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-on-surface">1. Vendor Dispatch</span>
+<span class="font-label-code text-[10px] text-outline">24-Oct 06:15 IST • Declared 800</span>
+</div>
+</div>
+<!-- Step 2: Gate Security Entry -->
+<div class="flex items-center gap-3 p-2 rounded bg-surface-container-low/50 border border-surface-container-highest">
+<div class="w-7 h-7 rounded-full bg-tertiary-container text-white flex items-center justify-center font-label-code text-xs">
+<span class="material-symbols-outlined text-[16px]">check</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-on-surface">2. Gate Security Inward</span>
+<span class="font-label-code text-[10px] text-outline">24-Oct 08:14 IST • Gate 2 Weigh</span>
+</div>
+</div>
+<!-- Step 3: Dock Physical Inspection (ACTIVE WITH WARNING) -->
+<div class="flex items-center gap-3 p-2 rounded bg-error-container/30 border border-error/40">
+<div class="w-7 h-7 rounded-full bg-error text-white flex items-center justify-center font-label-code text-xs">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-error">3. Dock Verification</span>
+<span class="font-label-code text-[10px] text-error font-medium">Variance -20 units short</span>
+</div>
+</div>
+<!-- Step 4: Warehouse Put-Away / Ledger Acceptance -->
+<div class="flex items-center gap-3 p-2 rounded bg-surface-container-lowest border border-outline-variant/40 opacity-70">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center font-label-code text-xs">
+              4
+            </div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-body-sm text-outline">4. Rack Staging</span>
+<span class="font-label-code text-[10px] text-outline">Pending Short-Pass Approval</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Keyboard Shortcuts & Live Toast Hookup (Vanilla JS) -->
+<script>
+    document.addEventListener('keydown', function(e) {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        const searchInput = document.querySelector('input[placeholder*="Search Challan"]');
+        if (searchInput) searchInput.focus();
+      }
+    });
+  </script>
+</body></html>
