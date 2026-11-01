@@ -7,7 +7,7 @@
 [![React](https://img.shields.io/badge/Frontend-React%2018%20%2B%20TypeScript-61DAFB.svg?logo=react)](https://react.dev)
 [![PostgreSQL](https://img.shields.io/badge/Database-PostgreSQL%2016-336791.svg?logo=postgresql)](https://www.postgresql.org)
 [![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind%20CSS-38B2AC.svg?logo=tailwind-css)](https://tailwindcss.com)
-[![Tests](https://img.shields.io/badge/Tests-15%20Passed-brightgreen.svg)](https://pytest.org)
+[![Tests](https://img.shields.io/badge/Tests-17%20Passed-brightgreen.svg)](https://pytest.org)
 
 ---
 
@@ -127,6 +127,13 @@ npm run dev
 ```
 Open browser at: [http://localhost:5173](http://localhost:5173)
 
+### Evaluator / Super Admin Credentials
+- **Username:** `superadmin` (or `admin@forgeflow.com`)
+- **Password:** `Admin@123456`
+- **Role:** `SUPER_ADMIN` *(Full Plant Controller Access)*
+- *Convenience Feature:* Click the **"Auto Fill"** button on the Login screen to instantly populate these credentials.
+
+
 ---
 
 ## 5. Automated Verification & Test Suite
@@ -154,6 +161,8 @@ The test suite covers all 15 operational rules specified in the assessment brief
 - `test_13_activity_log_chronology` — Verifies chronological audit log ordering.
 - `test_14_subcontract_job_detail_endpoint` — Validates full job relationship nesting.
 - `test_15_scenario_reset_endpoint` — Restores clean baseline data with one click.
+- `test_16_super_admin_jwt_authentication` — Verifies RFC 7519 JWT login and `/me` profile retrieval for Super Admin.
+- `test_17_invalid_credentials_rejected` — Verifies rejection of incorrect credentials with HTTP 401 Unauthorized.
 
 ---
 
