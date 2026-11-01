@@ -31,12 +31,22 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setEffectiveTheme(active);
 
     const root = document.documentElement;
+    const body = document.body;
+
     if (active === 'dark') {
       root.classList.add('dark');
       root.classList.remove('light');
+      if (body) {
+        body.classList.add('dark');
+        body.classList.remove('light');
+      }
     } else {
       root.classList.add('light');
       root.classList.remove('dark');
+      if (body) {
+        body.classList.add('light');
+        body.classList.remove('dark');
+      }
     }
 
     // Listen for OS system theme changes
@@ -48,9 +58,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         if (newSystemTheme === 'dark') {
           root.classList.add('dark');
           root.classList.remove('light');
+          if (body) {
+            body.classList.add('dark');
+            body.classList.remove('light');
+          }
         } else {
           root.classList.add('light');
           root.classList.remove('dark');
+          if (body) {
+            body.classList.add('light');
+            body.classList.remove('dark');
+          }
         }
       }
     };
@@ -84,3 +102,4 @@ export const useTheme = () => {
   if (!ctx) throw new Error('useTheme must be used within ThemeProvider');
   return ctx;
 };
+

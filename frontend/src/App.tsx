@@ -49,7 +49,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-[#0b0f17] text-slate-900 dark:text-slate-100 flex font-sans antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
+    <div className="min-h-screen bg-slate-100 dark:bg-[#0b0f17] text-slate-900 dark:text-slate-100 flex font-sans antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200">
       
       {/* Left Control Rail Sidebar */}
       <Sidebar
@@ -64,7 +64,7 @@ export function App() {
       />
 
       {/* Main Operating Workspace */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto">
+      <div className="flex-1 flex flex-col min-w-0 overflow-y-auto bg-slate-100 dark:bg-[#0b0f17] transition-colors duration-200">
         
         {/* Top Command Header */}
         <Header

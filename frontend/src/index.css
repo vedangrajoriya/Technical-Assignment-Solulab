@@ -3,8 +3,14 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    color-scheme: light;
+  }
+  :root.dark {
+    color-scheme: dark;
+  }
   body {
-    @apply bg-slate-950 text-slate-100 antialiased font-sans;
+    @apply bg-slate-100 text-slate-900 dark:bg-[#0b0f17] dark:text-slate-100 antialiased font-sans transition-colors duration-200;
   }
 }
 
@@ -14,13 +20,24 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #0f172a;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: #cbd5e1;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
   background: #475569;
 }
 
