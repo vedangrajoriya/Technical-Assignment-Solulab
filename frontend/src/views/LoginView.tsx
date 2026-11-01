@@ -117,7 +117,7 @@ export const LoginView: React.FC = () => {
       </div>
 
       {/* Floating Glassmorphism Authentication Card */}
-      <div className="relative z-10 w-full max-w-md bg-white/90 dark:bg-[#0f172a]/85 backdrop-blur-xl border border-slate-200/80 dark:border-slate-700/80 rounded-2xl p-7 shadow-2xl shadow-black/40 text-slate-900 dark:text-slate-100 transition-all duration-300">
+      <div className="relative z-10 w-full max-w-md bg-white/80 dark:bg-[#0c1220]/75 backdrop-blur-2xl border border-white/60 dark:border-slate-700/60 rounded-2xl p-7 shadow-2xl shadow-blue-950/20 text-slate-900 dark:text-slate-100 transition-all duration-300">
         
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center space-y-2 mb-6">

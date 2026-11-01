@@ -3,3 +3,4 @@ export type EmeraldHorizonBackgroundProps = { className?: string; [key: string]:
 export function EmeraldHorizonBackground(props: EmeraldHorizonBackgroundProps) {
   return <div className={`threeui-background ${props.className || ""}`} />;
 }
+

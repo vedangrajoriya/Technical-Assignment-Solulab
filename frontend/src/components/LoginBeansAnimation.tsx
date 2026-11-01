@@ -268,3 +268,4 @@ export const LoginBeansAnimation: React.FC = () => {
     />
   );
 };
+

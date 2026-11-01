@@ -51,3 +51,4 @@ def login(payload: LoginRequest, db: Session = Depends(get_db)):
 def get_profile(current_user: User = Depends(get_current_user)):
     """Returns profile details of the authenticated caller."""
     return UserProfileResponse.model_validate(current_user)
+

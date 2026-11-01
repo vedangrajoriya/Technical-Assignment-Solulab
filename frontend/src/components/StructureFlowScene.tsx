@@ -7,10 +7,10 @@ export function StructureFlowScene() {
       <StructureFlowCollection
         variant="structure-flow"
         speed={1.00}
-        pointSize={0.080}
-        opacity={0.40}
-        maskStart={0.20}
-        maskSolid={0.50}
+        pointSize={0.095}
+        opacity={0.65}
+        maskStart={0.05}
+        maskSolid={0.25}
       />
     </div>
   );
