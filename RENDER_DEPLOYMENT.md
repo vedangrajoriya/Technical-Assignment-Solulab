@@ -153,14 +153,12 @@ Follow these exact steps to launch the entire stack:
 ## Section G: Live URLs & Post-Deployment Wiring
 
 Once Render finishes deploying both services:
-1. **Backend API URL:** Render assigns a domain such as `https://forgeflow-api.onrender.com`.
-   - Verify health: Visit `https://forgeflow-api.onrender.com/health` in your browser. Expected response:
-     ```json
-     {"status":"HEALTHY","service":"ForgeFlow Manufacturing ERP","version":"1.0.0","environment":"production"}
-     ```
-   - OpenAPI Docs: Visit `https://forgeflow-api.onrender.com/docs`.
-2. **Frontend URL:** Render assigns a domain such as `https://forgeflow-frontend.onrender.com`.
-3. **CORS Verification:** If your frontend URL differs from `https://forgeflow-frontend.onrender.com` (e.g. custom domain), add it to `CORS_ORIGINS` under the `forgeflow-api` Environment tab in the Render Dashboard.
+1. **Live Production Instance:**
+   - **Frontend App URL:** [`https://forgeflow-frontend-gfuz.onrender.com/`](https://forgeflow-frontend-gfuz.onrender.com/)
+   - **Backend API URL:** Resolved dynamically via Render external URL.
+   - **Health Endpoint:** `/health` (HTTP 200 OK)
+   - **Swagger Docs:** `/docs`
+2. **CORS Configuration:** `https://forgeflow-frontend-gfuz.onrender.com` is configured in `CORS_ORIGINS` across `config.py` and `render.yaml`.
 
 ---
 

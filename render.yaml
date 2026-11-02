@@ -38,7 +38,7 @@ services:
       - key: ACCESS_TOKEN_EXPIRE_MINUTES
         value: "10080"
       - key: CORS_ORIGINS
-        value: https://forgeflow-frontend.onrender.com,http://localhost:5173
+        value: https://forgeflow-frontend.onrender.com,https://forgeflow-frontend-gfuz.onrender.com,http://localhost:5173
       - key: SEED_ADMIN_EMAIL
         value: admin@forgeflow.com
       - key: SEED_ADMIN_USERNAME

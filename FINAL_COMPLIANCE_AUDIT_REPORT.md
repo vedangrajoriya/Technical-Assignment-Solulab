@@ -36,7 +36,7 @@ Operational Accuracy:                OEE uncoupled from scenario; Quality Yield 
 Demo Values Labeled:                 ₹45/unit and ₹36,000 explicitly labeled as illustrative demo values
 Transit Discrepancy Integrity:       20-unit variance labeled as unconfirmed (no assumed theft/loss)
 Statutory Claim Status:              Corrected (Prototype reconciliation only; no unverified legal claims)
-Render Deployment Status:            READY FOR RENDER BLUEPRINT DEPLOYMENT
+Render Deployment Status:            DEPLOYED & VERIFIED (https://forgeflow-frontend-gfuz.onrender.com/)
 ========================================================================================
 ```
 
@@ -258,4 +258,4 @@ To run the application locally from a clean checkout:
 | **Render Cloud Readiness** | **PASS** | `render.yaml` Blueprint verified; `RENDER_DEPLOYMENT.md` documented; dynamic public API URL wiring via `RENDER_EXTERNAL_URL`; CORS regex matching. |
 
 **Official Assessment Verdict:** **READY FOR FORMAL SUBMISSION**  
-**Official Render Deployment Status:** **READY FOR RENDER BLUEPRINT DEPLOYMENT**
+**Official Render Deployment Status:** **DEPLOYED & LIVE** ([https://forgeflow-frontend-gfuz.onrender.com/](https://forgeflow-frontend-gfuz.onrender.com/))
