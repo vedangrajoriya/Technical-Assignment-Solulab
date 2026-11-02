@@ -318,3 +318,58 @@ def test_17_invalid_credentials_rejected():
     })
     assert resp.status_code == 401
 
+def test_18_scenario_reset_blocked_in_production():
+    """
+    Verify that the destructive scenario reset endpoint is blocked with 403 in production.
+    """
+    from backend.app.core.config import settings
+    orig_env = settings.ENVIRONMENT
+    try:
+        settings.ENVIRONMENT = "production"
+        resp = client.post("/api/v1/integration/reset-scenario")
+        assert resp.status_code == 403
+        assert "restricted" in resp.json()["detail"].lower()
+    finally:
+        settings.ENVIRONMENT = orig_env
+
+def test_19_invalid_jwt_token_rejected():
+    """
+    Verify protected endpoints reject forged or malformed tokens with 401 Unauthorized.
+    """
+    resp = client.get("/api/v1/auth/me", headers={"Authorization": "Bearer forged.invalid.token"})
+    assert resp.status_code == 401
+
+def test_20_exact_scenario_yield_and_shortfall_ratios():
+    """
+    Verify exact mathematical ratios required by the assessment brief:
+    - Quality Yield: 740 / 780 * 100 = 94.87%
+    - Customer Shortfall: 1,000 - 740 = 260 units (26.0% deficit)
+    - Transit Discrepancy: 800 - 780 = 20 units (2.5% loss of vendor claim)
+    - Invoice Variances: 20 unreceived, 60 unusable+missing
+    """
+    d = client.get("/api/v1/dashboard").json()
+    accepted = d["quality_accepted"]
+    received = d["warehouse_physical_receipt"]
+    required = d["required_quantity"]
+    reported = d["vendor_reported_dispatch"]
+    invoiced = d["vendor_invoiced_quantity"]
+
+    # Quality yield
+    yield_pct = round((accepted / received) * 100, 2)
+    assert yield_pct == 94.87
+
+    # Shortfall
+    assert required - accepted == 260
+    assert d["customer_shortfall"] == 260
+
+    # Transit discrepancy
+    assert reported - received == 20
+    assert d["transit_discrepancy"] == 20
+
+    # Invoice variances
+    assert invoiced - received == 20
+    assert invoiced - accepted == 60
+    assert d["invoice_vs_physical_variance"] == 20
+    assert d["invoice_vs_accepted_variance"] == 60
+
+

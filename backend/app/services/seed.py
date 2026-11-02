@@ -14,6 +14,7 @@ from backend.app.models.entities import (
     get_utc_now
 )
 from backend.app.core.security import hash_password
+from backend.app.core.config import settings
 
 def seed_scenario():
     """
@@ -194,21 +195,47 @@ def seed_scenario():
         for log in logs:
             db.add(log)
 
-        # 8. Seed Super Admin User
-        existing_admin = db.query(User).filter((User.email == "admin@forgeflow.com") | (User.username == "superadmin")).first()
+        # 8. Seed Super Admin User (Idempotent: Only creates if no admin user exists)
+        existing_admin = db.query(User).filter(
+            (User.email == settings.SEED_ADMIN_EMAIL) | 
+            (User.username == settings.SEED_ADMIN_USERNAME) |
+            (User.role == "SUPER_ADMIN")
+        ).first()
+
         if not existing_admin:
-            super_admin = User(
-                id=generate_uuid(),
-                email="admin@forgeflow.com",
-                username="superadmin",
-                hashed_password=hash_password("Admin@123456"),
-                full_name="System Super Admin (Plant Controller)",
-                role="SUPER_ADMIN",
-                is_active=1,
-                created_at=now
-            )
-            db.add(super_admin)
-            print("[SEED] Created Super Admin profile: admin@forgeflow.com / superadmin")
+            # In production, require an explicit, non-default password
+            if settings.ENVIRONMENT.lower() == "production":
+                if not settings.SEED_ADMIN_PASSWORD or settings.SEED_ADMIN_PASSWORD == "Admin@123456":
+                    print("[SECURITY] In production, SEED_ADMIN_PASSWORD must be configured via environment variable. Skipping admin creation.")
+                else:
+                    super_admin = User(
+                        id=generate_uuid(),
+                        email=settings.SEED_ADMIN_EMAIL,
+                        username=settings.SEED_ADMIN_USERNAME,
+                        hashed_password=hash_password(settings.SEED_ADMIN_PASSWORD),
+                        full_name="System Super Admin (Plant Controller)",
+                        role="SUPER_ADMIN",
+                        is_active=1,
+                        created_at=now
+                    )
+                    db.add(super_admin)
+                    print(f"[SEED] Initialized production super admin profile: {settings.SEED_ADMIN_USERNAME}")
+            else:
+                # Non-production (development, demo, testing)
+                super_admin = User(
+                    id=generate_uuid(),
+                    email=settings.SEED_ADMIN_EMAIL,
+                    username=settings.SEED_ADMIN_USERNAME,
+                    hashed_password=hash_password(settings.SEED_ADMIN_PASSWORD),
+                    full_name="System Super Admin (Plant Controller)",
+                    role="SUPER_ADMIN",
+                    is_active=1,
+                    created_at=now
+                )
+                db.add(super_admin)
+                print(f"[SEED] Initialized environment-controlled admin profile: {settings.SEED_ADMIN_USERNAME}")
+        else:
+            print(f"[SEED] Administrator profile '{existing_admin.username}' already exists. Preserving existing password and credentials.")
 
         db.commit()
         print("[SEED] Successfully seeded exact assessment scenario into database:")

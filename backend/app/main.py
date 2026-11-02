@@ -10,8 +10,9 @@ from backend.app.services.seed import seed_scenario
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Startup: Ensure tables exist and seed scenario data if database is empty
-    Base.metadata.create_all(bind=engine)
+    # In non-production environments, ensure tables exist as convenience if migrations were skipped
+    if settings.ENVIRONMENT.lower() != "production":
+        Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:
         if not db.query(CustomerOrder).first():
@@ -29,7 +30,7 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Configure CORS
+# Configure CORS with strict explicit origin whitelisting (no arbitrary wildcard or broad subdomain regex)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,

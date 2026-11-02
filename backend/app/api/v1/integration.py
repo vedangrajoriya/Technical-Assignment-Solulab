@@ -1,11 +1,12 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from backend.app.api.deps import get_db
 from backend.app.models.entities import VendorExternalEvent
 from backend.app.schemas.erp import VendorImportRequest, VendorImportResponse, VendorExternalEventSchema
 from backend.app.services.erp_service import ERPService
 from backend.app.services.seed import seed_scenario
+from backend.app.core.config import settings
 
 router = APIRouter(prefix="/integration", tags=["External Integration Simulation"])
 
@@ -48,7 +49,14 @@ def reset_to_assessment_baseline():
     - Dock Received: 780
     - Accepted: 740, Rejected: 40
     - Invoiced: 800
+    
+    Guarded: Disabled in production environments to protect production data.
     """
+    if settings.ENVIRONMENT.lower() == "production":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Scenario reset endpoint is restricted to local/demo/development environments."
+        )
     seed_scenario()
     return {"status": "SUCCESS", "message": "Database reset to the original assessment scenario baseline."}
 

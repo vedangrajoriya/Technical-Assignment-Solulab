@@ -23,11 +23,27 @@ export const ThreeMaterialFlow: React.FC<ThreeMaterialFlowProps> = ({
   const mountRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeStation, setActiveStation] = useState<any>(null);
+  const [webGlAvailable, setWebGlAvailable] = useState<boolean>(true);
   const { effectiveTheme } = useTheme();
 
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
+
+    // Check WebGL availability gracefully
+    try {
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        setWebGlAvailable(false);
+        return;
+      }
+    } catch {
+      setWebGlAvailable(false);
+      return;
+    }
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const width = container.clientWidth;
     const height = isExpanded ? 460 : 300;
@@ -119,8 +135,8 @@ export const ThreeMaterialFlow: React.FC<ThreeMaterialFlowProps> = ({
         x: 4, z: 0, 
         color: 0xf59e0b, 
         qty: `${receivedQty.toLocaleString()} counted`, 
-        status: `TRANSIT LOSS: -${reportedQty - receivedQty} UNITS`,
-        details: "Dock count verified 780 units received. Discrepancy of 20 missing units between vendor challan and dock count." 
+        status: `TRANSIT DISCREPANCY: ${reportedQty - receivedQty} UNITS (Cause Unconfirmed)`,
+        details: "Dock count verified 780 units received. Discrepancy of 20 units between vendor reported dispatch (800) and dock receipt (780). Cause unconfirmed (under joint investigation)." 
       },
       { 
         id: "qc", 
@@ -394,46 +410,48 @@ export const ThreeMaterialFlow: React.FC<ThreeMaterialFlowProps> = ({
       camera.position.z = Math.cos(cameraAngle) * radius;
       camera.lookAt(0, 1.5, 0);
 
-      // Pulse Beacons & Hologram Rings
-      beaconMeshes.forEach((b, idx) => {
-        b.scale.setScalar(1 + 0.12 * Math.sin(elapsedTime * 3.5 + idx));
-      });
-      ringMeshes.forEach((r, idx) => {
-        r.rotation.z += 0.01;
-      });
-
-      // Rotate Pinion Gear 3D Models
-      stationGroups.forEach(g => {
-        g.children.forEach(c => {
-          if ((c as any).isRotatingGear) {
-            c.rotation.y += 0.02;
-          }
+      if (!prefersReducedMotion) {
+        // Pulse Beacons & Hologram Rings
+        beaconMeshes.forEach((b, idx) => {
+          b.scale.setScalar(1 + 0.12 * Math.sin(elapsedTime * 3.5 + idx));
         });
-      });
+        ringMeshes.forEach((r, idx) => {
+          r.rotation.z += 0.01;
+        });
 
-      // Advance Material Packets along Conveyor
-      packets.forEach(p => {
-        p.t += p.speed;
-        if (p.t > 1) p.t = 0;
-        const pt = p.curve.getPoint(p.t);
-        p.mesh.position.copy(pt);
-        p.mesh.position.y += 0.45;
-        p.mesh.rotation.y += 0.03;
-        p.mesh.rotation.x += 0.02;
-      });
+        // Rotate Pinion Gear 3D Models
+        stationGroups.forEach(g => {
+          g.children.forEach(c => {
+            if ((c as any).isRotatingGear) {
+              c.rotation.y += 0.02;
+            }
+          });
+        });
 
-      // Branch packet animation
-      tAccepted += 0.003;
-      if (tAccepted > 1) tAccepted = 0;
-      const ptAcc = curveAccepted.getPoint(tAccepted);
-      acceptedPacketMesh.position.copy(ptAcc);
-      acceptedPacketMesh.position.y += 0.45;
+        // Advance Material Packets along Conveyor
+        packets.forEach(p => {
+          p.t += p.speed;
+          if (p.t > 1) p.t = 0;
+          const pt = p.curve.getPoint(p.t);
+          p.mesh.position.copy(pt);
+          p.mesh.position.y += 0.45;
+          p.mesh.rotation.y += 0.03;
+          p.mesh.rotation.x += 0.02;
+        });
 
-      tQuarantine += 0.003;
-      if (tQuarantine > 1) tQuarantine = 0;
-      const ptQ = curveQuarantine.getPoint(tQuarantine);
-      quarantinePacketMesh.position.copy(ptQ);
-      quarantinePacketMesh.position.y += 0.45;
+        // Branch packet animation
+        tAccepted += 0.003;
+        if (tAccepted > 1) tAccepted = 0;
+        const ptAcc = curveAccepted.getPoint(tAccepted);
+        acceptedPacketMesh.position.copy(ptAcc);
+        acceptedPacketMesh.position.y += 0.45;
+
+        tQuarantine += 0.003;
+        if (tQuarantine > 1) tQuarantine = 0;
+        const ptQ = curveQuarantine.getPoint(tQuarantine);
+        quarantinePacketMesh.position.copy(ptQ);
+        quarantinePacketMesh.position.y += 0.45;
+      }
 
       renderer.render(scene, camera);
     };
@@ -507,12 +525,25 @@ export const ThreeMaterialFlow: React.FC<ThreeMaterialFlowProps> = ({
         </div>
       </div>
 
-      {/* 3D WebGL Canvas Container */}
-      <div 
-        ref={mountRef} 
-        style={{ height: isExpanded ? '460px' : '300px' }} 
-        className="w-full relative cursor-grab active:cursor-grabbing transition-all duration-300" 
-      />
+      {/* 3D WebGL Canvas Container or Static Fallback */}
+      {webGlAvailable ? (
+        <div 
+          ref={mountRef} 
+          style={{ height: isExpanded ? '460px' : '300px' }} 
+          className="w-full relative cursor-grab active:cursor-grabbing transition-all duration-300" 
+        />
+      ) : (
+        <div 
+          style={{ height: isExpanded ? '460px' : '300px' }} 
+          className="w-full flex flex-col items-center justify-center p-6 bg-slate-900 text-center space-y-3 font-mono"
+        >
+          <Info className="w-8 h-8 text-cyan-400" />
+          <h4 className="text-sm font-bold text-white">WebGL Hardware Acceleration Offline</h4>
+          <p className="text-xs text-slate-400 max-w-md">
+            Rendering high-fidelity 2D static schematic. All material quantities ($1,000 sent, $800 reported, $780 dock counted, $740 accepted, $40 quarantined) remain accessible below.
+          </p>
+        </div>
+      )}
 
       {/* Selected Station Telemetry HUD Popover */}
       {activeStation && (
@@ -548,11 +579,11 @@ export const ThreeMaterialFlow: React.FC<ThreeMaterialFlowProps> = ({
         </button>
 
         <button 
-          onClick={() => setActiveStation({ name: "Dock Inward Count", qty: `${receivedQty} units`, status: `Missing: -${reportedQty - receivedQty}`, details: "Physical dock verification short by 20 units against vendor dispatch claim." })}
+          onClick={() => setActiveStation({ name: "Dock Inward Count", qty: `${receivedQty} units`, status: `Discrepancy: ${reportedQty - receivedQty} (Cause Unconfirmed)`, details: "Physical dock count verified 780 units received. Discrepancy of 20 units against vendor dispatch claim of 800 units. Cause unconfirmed." })}
           className="flex items-center space-x-1.5 px-2 py-1 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 hover:bg-amber-500/30 cursor-pointer"
         >
           <span className="w-2 h-2 rounded-full bg-amber-400" />
-          <span>Dock Count: {receivedQty} (-{reportedQty - receivedQty})</span>
+          <span>Dock Count: {receivedQty} (Variance: {reportedQty - receivedQty})</span>
         </button>
 
         <button 

@@ -11,7 +11,19 @@ import {
   TokenResponse
 } from '../types/erp';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/v1';
+// Resolve API Base URL gracefully across cloud deployment and local development
+let rawBase = (import.meta.env.VITE_API_BASE_URL || '/api/v1').trim();
+if (rawBase.endsWith('/')) {
+  rawBase = rawBase.slice(0, -1);
+}
+// If Render host is supplied without protocol, prepend https://
+if (rawBase.includes('.onrender.com') && !rawBase.startsWith('http://') && !rawBase.startsWith('https://')) {
+  rawBase = `https://${rawBase}`;
+}
+// Ensure /api/v1 endpoint suffix is present
+const BASE_URL = rawBase.endsWith('/api/v1') || rawBase === '/api/v1' 
+  ? rawBase 
+  : `${rawBase}/api/v1`;
 
 function getAuthHeaders(): HeadersInit {
   const token = localStorage.getItem('forgeflow_token');

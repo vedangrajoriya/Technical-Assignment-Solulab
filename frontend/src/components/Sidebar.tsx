@@ -15,7 +15,10 @@ import {
   Moon,
   Laptop,
   LogOut,
-  UserCheck
+  UserCheck,
+  Activity,
+  Cpu,
+  Clock
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
@@ -70,8 +73,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'quality',
-      label: 'Quality Control Lab',
-      subtitle: 'Inspection & Quarantine',
+      label: 'Vision Quality Lab',
+      subtitle: 'AI Metrology & Quarantine',
       icon: ShieldCheck,
       badge: rejectedQty > 0 ? `${rejectedQty} rework` : null,
       badgeType: 'warning',
@@ -102,24 +105,24 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-64 bg-white dark:bg-[#0e1422] border-r border-slate-200 dark:border-forge-border flex flex-col justify-between h-screen sticky top-0 z-30 select-none transition-colors duration-200">
+    <aside className="w-64 bg-white dark:bg-[#0c111d] border-r border-slate-200 dark:border-slate-800/80 flex flex-col justify-between h-screen sticky top-0 z-30 select-none transition-colors duration-200">
       
       {/* Brand & Facility Info */}
-      <div>
-        <div className="p-4 border-b border-slate-200 dark:border-forge-border/80 bg-slate-50/80 dark:bg-[#0a0f1a] transition-colors">
+      <div className="overflow-y-auto">
+        <div className="p-4 border-b border-slate-200 dark:border-slate-800/80 bg-slate-50/80 dark:bg-[#090d16] transition-colors">
           <div className="flex items-center space-x-3">
             <ForgeFlowLogo size={36} showText={false} />
             <div>
               <div className="text-sm font-bold text-slate-900 dark:text-white tracking-tight flex items-center space-x-1.5 font-mono">
                 <span>ForgeFlow ERP</span>
                 <span className="text-[9px] px-1.5 py-0.2 rounded bg-blue-100 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300 font-mono font-semibold">
-                  v1.0
+                  v1.2
                 </span>
               </div>
               <div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">
-                Manufacturing Operations
+                Subcontract & Manufacturing
               </div>
-              <div className="text-[11px] text-blue-700 dark:text-blue-300 font-medium truncate">
+              <div className="text-[11px] text-blue-700 dark:text-cyan-400 font-medium truncate">
                 Apex Auto Components Ltd.
               </div>
             </div>
@@ -133,21 +136,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className={`w-full py-1.5 px-3 rounded-lg text-xs font-semibold flex items-center justify-between transition border ${
               show3D
                 ? 'bg-cyan-50 dark:bg-cyan-500/15 text-cyan-800 dark:text-cyan-300 border-cyan-300 dark:border-cyan-500/40 shadow-sm'
-                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700 hover:text-slate-900 dark:hover:text-white'
+                : 'bg-slate-100 dark:bg-slate-800/60 text-slate-600 dark:text-slate-400 border-slate-200 dark:border-slate-700/60 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
             <span className="flex items-center space-x-2">
               <Sparkles className="w-3.5 h-3.5 text-cyan-600 dark:text-cyan-400" />
-              <span>3D Material Flow</span>
+              <span>3D Digital Twin</span>
             </span>
             <span className="text-[10px] font-mono px-1.5 rounded bg-slate-200/80 dark:bg-black/40 text-slate-700 dark:text-slate-300">
-              {show3D ? 'VISIBLE' : 'HIDDEN'}
+              {show3D ? 'ONLINE' : 'OFFLINE'}
             </span>
           </button>
         </div>
 
         {/* Navigation List */}
-        <nav className="p-3 space-y-1 mt-1">
+        <nav className="p-3 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = currentTab === item.id;
@@ -156,12 +159,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <button
                 key={item.id}
                 onClick={() => onSelectTab(item.id)}
-                className={`w-full text-left px-3 py-2.5 rounded-lg transition-all flex items-center justify-between group ${
+                className={`w-full text-left px-3 py-2.5 rounded-lg transition-all flex items-center justify-between group relative ${
                   isActive
                     ? 'bg-blue-600 text-white shadow-sm font-semibold'
-                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/80 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/70 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
+                {/* Active Indicator Bar */}
+                {isActive && (
+                  <span className="absolute left-0 top-1.5 bottom-1.5 w-1 bg-cyan-300 rounded-r" />
+                )}
+
                 <div className="flex items-center space-x-2.5">
                   <Icon className={`w-4 h-4 flex-shrink-0 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-blue-600 dark:group-hover:text-cyan-400'}`} />
                   <div>
@@ -189,21 +197,50 @@ export const Sidebar: React.FC<SidebarProps> = ({
             );
           })}
         </nav>
+
+        {/* Shop Floor Process Context (Process Spec & Active Cell) */}
+        <div className="px-3 pb-3">
+          <div className="p-3 rounded-xl bg-slate-100/80 dark:bg-slate-800/40 border border-slate-200 dark:border-slate-800/80 space-y-2">
+            <div className="flex items-center justify-between text-[11px] font-mono">
+              <span className="flex items-center space-x-1.5 text-slate-700 dark:text-slate-300 font-semibold">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span>Line 3 · Heat Treat</span>
+              </span>
+              <span className="text-[10px] text-blue-600 dark:text-cyan-400 font-bold">Station 3B</span>
+            </div>
+
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
+                <span>Shift A (06:00 - 14:00)</span>
+                <span>Process Spec</span>
+              </div>
+              <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-1.5 overflow-hidden">
+                <div className="bg-gradient-to-r from-blue-500 to-cyan-400 h-1.5 rounded-full w-[67%]" />
+              </div>
+            </div>
+
+            <div className="pt-1.5 border-t border-slate-200 dark:border-slate-700/60 flex items-center justify-between text-[10px] font-mono text-slate-500 dark:text-slate-400">
+              <span>Gas Carburizing Spec</span>
+              <span className="text-emerald-600 dark:text-emerald-400 font-bold">58-62 HRC (920°C)</span>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       {/* Footer System Status & Reset Baseline */}
-      <div className="p-3 border-t border-slate-200 dark:border-forge-border/80 bg-slate-50/80 dark:bg-[#0a0f1a] space-y-2.5 transition-colors">
+      <div className="p-3 border-t border-slate-200 dark:border-slate-800/80 bg-slate-50/80 dark:bg-[#090d16] space-y-2 transition-colors">
         
         {/* Authenticated Super Admin User Pill */}
         {user && (
-          <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between">
+          <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800/70 border border-slate-200 dark:border-slate-700/80 flex items-center justify-between">
             <div className="flex items-center space-x-2 min-w-0">
               <div className="w-7 h-7 rounded-md bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xs font-bold font-mono shadow-sm flex-shrink-0">
                 {user.username.substring(0, 2).toUpperCase()}
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-bold text-slate-900 dark:text-white truncate font-mono">
-                  {user.full_name.split(' ')[0]} {user.full_name.split(' ')[1] || ''}
+                  {user.full_name}
                 </div>
                 <div className="flex items-center space-x-1">
                   <span className="text-[9px] px-1 rounded bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-300 font-mono font-bold">
@@ -221,34 +258,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
             </button>
           </div>
         )}
-
-        {/* Compact Theme Switcher in Sidebar */}
-        <div className="flex items-center justify-between px-2 py-1.5 rounded-md bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-transparent text-[11px] text-slate-700 dark:text-slate-300 font-mono">
-          <span>Theme:</span>
-          <div className="flex items-center space-x-1">
-            <button
-              onClick={() => setTheme('light')}
-              title="Light Mode"
-              className={`p-1 rounded transition ${theme === 'light' ? 'bg-white text-amber-600 shadow-sm font-bold' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-            >
-              <Sun className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setTheme('dark')}
-              title="Dark Mode"
-              className={`p-1 rounded transition ${theme === 'dark' ? 'bg-slate-800 text-blue-400 shadow-sm font-bold' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-            >
-              <Moon className="w-3.5 h-3.5" />
-            </button>
-            <button
-              onClick={() => setTheme('system')}
-              title="System Default"
-              className={`p-1 rounded transition ${theme === 'system' ? 'bg-slate-200 dark:bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 shadow-sm font-bold' : 'text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
-            >
-              <Laptop className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        </div>
 
         <div className="flex items-center justify-between text-[11px] text-slate-600 dark:text-slate-400 font-mono px-1">
           <span className="flex items-center space-x-1.5">

@@ -1,0 +1,73 @@
+# Render Blueprint Specification for ForgeFlow Manufacturing ERP
+# Architecture: Render Managed PostgreSQL 16 + FastAPI Web Service + React 18 Static Site
+# Unified Infrastructure as Code (IaC)
+
+databases:
+  - name: forgeflow-db
+    databaseName: forgeflow
+    user: forgeflow_user
+    plan: free
+    region: oregon
+    postgresMajorVersion: "16"
+
+services:
+  # --------------------------------------------------------------------------
+  # SERVICE 1: FastAPI Backend Web Service
+  # --------------------------------------------------------------------------
+  - type: web
+    name: forgeflow-api
+    runtime: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: python -m alembic -c backend/alembic.ini upgrade head && uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: forgeflow-db
+          property: connectionString
+      - key: ENVIRONMENT
+        value: production
+      - key: PROJECT_NAME
+        value: ForgeFlow Manufacturing ERP
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "10080"
+      - key: CORS_ORIGINS
+        value: https://forgeflow-frontend.onrender.com,http://localhost:5173
+      - key: SEED_ADMIN_EMAIL
+        value: admin@forgeflow.com
+      - key: SEED_ADMIN_USERNAME
+        value: superadmin
+      - key: SEED_ADMIN_PASSWORD
+        sync: false
+      - key: PYTHON_VERSION
+        value: 3.12.4
+
+  # --------------------------------------------------------------------------
+  # SERVICE 2: React 18 + Vite + Three.js Frontend Static Site
+  # --------------------------------------------------------------------------
+  - type: web
+    name: forgeflow-frontend
+    runtime: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm ci && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    envVars:
+      - key: VITE_API_BASE_URL
+        fromService:
+          type: web
+          name: forgeflow-api
+          envVarKey: RENDER_EXTERNAL_URL
+      - key: NODE_VERSION
+        value: "20"
+

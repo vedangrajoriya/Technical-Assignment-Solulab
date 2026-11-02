@@ -11,10 +11,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication & Access Control"])
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
     """
     Validates user credentials (email or username) and returns a signed JWT bearer token.
-    Pre-configured Super Admin credentials:
-      - Email: admin@forgeflow.com
-      - Username: superadmin
-      - Password: Admin@123456
+    Super Admin credentials are configured via environment variables (SEED_ADMIN_EMAIL / SEED_ADMIN_USERNAME).
     """
     identifier = payload.username_or_email.strip().lower()
     user = db.query(User).filter(

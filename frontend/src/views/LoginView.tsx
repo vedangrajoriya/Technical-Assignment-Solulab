@@ -24,8 +24,8 @@ export const LoginView: React.FC = () => {
   const { theme, setTheme } = useTheme();
 
   const [bgMode, setBgMode] = useState<'structure-flow' | 'scatter-beans'>('structure-flow');
-  const [identifier, setIdentifier] = useState('superadmin');
-  const [password, setPassword] = useState('Admin@123456');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -38,16 +38,10 @@ export const LoginView: React.FC = () => {
     try {
       await login(identifier, password);
     } catch (err: any) {
-      setError(err.message || 'Authentication failed. Please check credentials.');
+      setError(err.message || 'Authentication failed. Please verify credentials.');
     } finally {
       setIsLoading(false);
     }
-  };
-
-  const handleFillSuperAdmin = () => {
-    setIdentifier('superadmin');
-    setPassword('Admin@123456');
-    setError(null);
   };
 
   return (
@@ -135,25 +129,12 @@ export const LoginView: React.FC = () => {
           </div>
         </div>
 
-        {/* Evaluator Quick Demo Fill Callout */}
-        <div className="mb-5 p-3 rounded-xl bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-purple-500/10 border border-blue-500/20 text-xs flex items-center justify-between">
-          <div className="space-y-0.5">
-            <div className="flex items-center space-x-1.5 text-blue-700 dark:text-cyan-400 font-semibold font-mono">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Checker / Evaluator Access</span>
-            </div>
-            <div className="text-[11px] text-slate-600 dark:text-slate-300 font-mono">
-              ID: <strong className="text-slate-900 dark:text-white">superadmin</strong> • Pass: <strong className="text-slate-900 dark:text-white">Admin@123456</strong>
-            </div>
+        {/* Security Notice */}
+        <div className="mb-5 p-3 rounded-xl bg-slate-100 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 text-xs flex items-center space-x-2.5">
+          <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-cyan-400 flex-shrink-0" />
+          <div className="text-[11px] text-slate-600 dark:text-slate-300 font-mono">
+            <span>Secure Access: Enter authorized credentials configured in environment settings.</span>
           </div>
-          <button
-            type="button"
-            onClick={handleFillSuperAdmin}
-            className="px-2.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-mono text-[11px] font-semibold transition shadow-sm flex items-center space-x-1 flex-shrink-0"
-          >
-            <Sparkles className="w-3 h-3 text-cyan-300" />
-            <span>Auto Fill</span>
-          </button>
         </div>
 
         {/* Error Alert */}
@@ -181,7 +162,8 @@ export const LoginView: React.FC = () => {
                 required
                 value={identifier}
                 onChange={(e) => setIdentifier(e.target.value)}
-                placeholder="superadmin or admin@forgeflow.com"
+                placeholder="Enter username or email"
+                autoComplete="username"
                 className="w-full pl-9 pr-3 py-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 font-mono text-xs transition"
               />
             </div>
@@ -207,6 +189,7 @@ export const LoginView: React.FC = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Enter password"
+                autoComplete="current-password"
                 className="w-full pl-9 pr-10 py-2.5 rounded-lg bg-slate-50 dark:bg-slate-900/90 border border-slate-300 dark:border-slate-700 text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500 font-mono text-xs transition"
               />
               <button

@@ -109,9 +109,9 @@ class InvoiceReconcileAction(BaseModel):
 class VendorInvoiceResponse(BaseModel):
     id: str
     invoice_number: str
-    invoiced_quantity: int
-    unit_rate: float
-    total_amount: float
+    invoiced_quantity: int = Field(..., description="Quantity claimed by vendor (800 units per assessment scenario)")
+    unit_rate: float = Field(default=45.0, description="Illustrative demo rate (₹45/unit; unit rate is not specified in assessment)")
+    total_amount: float = Field(default=36000.0, description="Illustrative demo invoice total (₹36,000; total amount is not specified in assessment)")
     reconciliation_status: str
     flagged_reason: Optional[str] = None
     action_note: Optional[str] = None

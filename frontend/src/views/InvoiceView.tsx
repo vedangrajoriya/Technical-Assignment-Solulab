@@ -106,7 +106,7 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({ onDataChanged }) => {
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 font-sans">
-                  Vendor: Apex Heat Treaters Pvt Ltd • Rate: ₹{inv.unit_rate.toFixed(2)} / unit
+                  Vendor: Apex Heat Treaters Pvt Ltd • Rate: ₹{inv.unit_rate.toFixed(2)} / unit <span className="text-[10px] text-slate-400 font-mono">(Illustrative Demo Rate)</span>
                 </p>
               </div>
 
@@ -114,13 +114,13 @@ export const InvoiceView: React.FC<InvoiceViewProps> = ({ onDataChanged }) => {
                 <div className="text-right">
                   <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold block font-mono">Invoiced Quantity</span>
                   <span className="text-xl font-bold font-mono text-slate-900 dark:text-white tabular-nums">{inv.invoiced_quantity.toLocaleString()}</span>
-                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-sans">units claimed</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-sans">units claimed (Prompt Spec)</span>
                 </div>
                 <div className="h-8 w-px bg-slate-200 dark:bg-slate-800" />
                 <div className="text-right">
                   <span className="text-[10px] uppercase text-slate-500 dark:text-slate-400 font-semibold block font-mono">Total Invoice Bill</span>
                   <span className="text-xl font-bold font-mono text-emerald-600 dark:text-emerald-400 tabular-nums">₹{inv.total_amount.toLocaleString()}</span>
-                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-sans">subcontract charges</span>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 block font-sans">demo amount (₹45 × 800)</span>
                 </div>
               </div>
             </div>

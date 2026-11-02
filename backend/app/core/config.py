@@ -21,12 +21,32 @@ class Settings(BaseSettings):
     
     # Environment
     ENVIRONMENT: str = os.getenv("ENVIRONMENT", "development")
+    
+    # Seed Super Admin Configuration (Controlled via Environment)
+    SEED_ADMIN_EMAIL: str = os.getenv("SEED_ADMIN_EMAIL", "admin@forgeflow.com")
+    SEED_ADMIN_USERNAME: str = os.getenv("SEED_ADMIN_USERNAME", "superadmin")
+    SEED_ADMIN_PASSWORD: str = os.getenv("SEED_ADMIN_PASSWORD", "Admin@123456")
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_database_url(cls, v: str) -> str:
+        """
+        Normalize Render or cloud PostgreSQL URLs to psycopg2 compatible SQLAlchemy scheme.
+        Converts 'postgres://' or 'postgresql://' to 'postgresql+psycopg2://'.
+        """
+        if isinstance(v, str):
+            if v.startswith("postgres://"):
+                return v.replace("postgres://", "postgresql+psycopg2://", 1)
+            elif v.startswith("postgresql://") and not v.startswith("postgresql+"):
+                return v.replace("postgresql://", "postgresql+psycopg2://", 1)
+        return v
+
     CORS_ORIGINS: Union[List[str], str] = [
         "http://localhost:5173",
         "http://localhost:3000",
         "http://127.0.0.1:5173",
         "http://127.0.0.1:3000",
-        "*"
+        "https://forgeflow-frontend.onrender.com"
     ]
 
     @field_validator("CORS_ORIGINS", mode="before")
