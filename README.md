@@ -28,7 +28,7 @@
 ### Demo Credentials (Super Admin)
 - **Login URL:** [`https://forgeflow-frontend-gfuz.onrender.com/`](https://forgeflow-frontend-gfuz.onrender.com/) (or `http://localhost:5173` locally)
 - **Username / Email:** `superadmin` / `admin@forgeflow.com`
-- **Password:** `Admin@123456`
+- **Password:** `Covid@19`
 - **Role:** `SUPER_ADMIN` (Plant Controller)
 
 ---
