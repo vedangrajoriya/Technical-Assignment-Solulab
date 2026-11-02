@@ -51,10 +51,11 @@ services:
   # --------------------------------------------------------------------------
   # SERVICE 2: React 18 + Vite + Three.js Frontend Static Site
   # --------------------------------------------------------------------------
+  
+  # SERVICE 2: React 18 + Vite + Three.js Frontend Static Site
   - type: web
     name: forgeflow-frontend
     runtime: static
-    plan: free
     rootDir: frontend
     buildCommand: npm ci && npm run build
     staticPublishPath: dist
@@ -70,4 +71,5 @@ services:
           envVarKey: RENDER_EXTERNAL_URL
       - key: NODE_VERSION
         value: "20"
+
 
